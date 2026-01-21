@@ -1,0 +1,244 @@
+/* Vibrant Gold Stars */
+.star-filled, .star-clickable, .prof-stars svg {
+  color: #FFD700 !important;
+}
+
+.profile-page {
+  min-height: 100vh;
+  background-color: #fdfaf5;
+  padding: 60px 20px;
+  position: relative;
+}
+
+/* FIXED: Small clean back arrow exactly where marked */
+.nav-back-arrow-fixed {
+  position: absolute;
+  left: 30px; 
+  top: 15px; 
+  background: none;
+  border: none;
+  color: #8b5e3c;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: transform 0.2s;
+  z-index: 100;
+}
+
+.nav-back-arrow-fixed:hover { 
+  transform: scale(1.1); 
+  color: #2d1b10; 
+}
+
+.profile-container { 
+  max-width: 850px; 
+  margin: 0 auto; 
+}
+
+.profile-header { 
+  text-align: center; 
+  margin-bottom: 60px; 
+}
+
+.profile-header h1 { 
+  font-size: 2.2rem; 
+  font-family: 'Merriweather', serif; 
+  color: #2d241e; 
+  margin: 15px 0 5px; 
+}
+
+.profile-email { 
+  color: #888; 
+  font-size: 0.95rem; 
+}
+
+.section-heading {
+  font-family: 'Merriweather', serif;
+  font-size: 1.6rem;
+  color: #8b5e3c;
+  margin-bottom: 30px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+/* RESTRUCTURED CARD: Resolves congestion */
+.prof-review-card-modern {
+  display: flex;
+  background: white;
+  border-radius: 18px;
+  padding: 25px;
+  margin-bottom: 25px;
+  gap: 35px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+}
+
+/* Left Column: Book Image & Info below it */
+.prof-book-info-col { 
+  width: 130px; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  text-align: center; 
+}
+
+.prof-rev-img-large { 
+  width: 100%; 
+  height: 180px; 
+  object-fit: cover; 
+  border-radius: 8px; 
+  margin-bottom: 10px; 
+}
+
+.prof-book-title-sub { 
+  font-size: 0.95rem; 
+  color: #2d241e; 
+  font-weight: 700; 
+  margin-bottom: 5px; 
+  line-height: 1.2; 
+}
+
+.prof-stars-sub { 
+  display: flex; 
+  gap: 3px; 
+}
+
+/* Right Column: Review Text & Actions */
+.prof-rev-content-col { 
+  flex: 1; 
+  display: flex; 
+  flex-direction: column; 
+}
+
+.prof-meta-top { 
+  display: flex; 
+  align-items: center; 
+  gap: 10px; 
+  margin-bottom: 15px; 
+}
+
+.prof-user-badge-small {
+  background: #8b5e3c; 
+  color: white; 
+  width: 30px; 
+  height: 30px; 
+  border-radius: 50%;
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  font-size: 0.7rem; 
+  font-weight: 700;
+}
+
+.rev-date-tag { 
+  color: #aaa; 
+  font-size: 0.8rem; 
+  margin-left: auto; 
+}
+
+.prof-comment-text { 
+  font-size: 1rem; 
+  color: #444; 
+  line-height: 1.5; 
+  font-style: italic; 
+  margin-bottom: 20px; 
+  flex: 1; 
+}
+
+.prof-actions-row { 
+  display: flex; 
+  gap: 10px; 
+}
+
+.prof-btn-edit, .prof-btn-delete {
+  padding: 8px 18px; 
+  border-radius: 8px; 
+  border: none; 
+  font-weight: 600; 
+  cursor: pointer;
+  color: white; 
+  display: flex; 
+  align-items: center; 
+  gap: 6px;
+}
+
+.prof-btn-edit { background: #5a8d8d; }
+.prof-btn-delete { background: #8b5e3c; }
+
+/* Modal Refinements */
+.edit-modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(45, 36, 30, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.edit-modal-content-compact, .delete-modal-content-compact {
+  background: white;
+  width: 90%;
+  max-width: 440px;
+  padding: 30px;
+  border-radius: 20px;
+}
+
+.modal-header { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  margin-bottom: 20px; 
+}
+
+/* FIXED: Cross icon on the far right */
+.modal-close-x { 
+  background: none; 
+  border: none; 
+  font-size: 1.2rem; 
+  cursor: pointer; 
+  color: #8b5e3c; 
+}
+
+.modal-label { 
+  display: block; 
+  font-weight: 700; 
+  margin: 15px 0 8px; 
+}
+
+.modal-body textarea {
+  width: 100%; 
+  height: 120px; 
+  padding: 15px; 
+  border-radius: 12px; 
+  border: 1px solid #ddd; 
+  resize: none;
+}
+
+.modal-footer { 
+  display: flex; 
+  gap: 15px; 
+  margin-top: 30px; 
+}
+
+.btn-update-theme, .btn-confirm-delete-theme {
+  background: #8b5e3c; 
+  color: white; 
+  border: none; 
+  padding: 14px; 
+  border-radius: 30px; 
+  flex: 1; 
+  font-weight: 700; 
+  cursor: pointer;
+}
+
+.btn-cancel-theme {
+  background: #f5f0eb; 
+  color: #8b5e3c; 
+  padding: 14px; 
+  border-radius: 30px; 
+  flex: 1; 
+  font-weight: 700; 
+  cursor: pointer;
+}

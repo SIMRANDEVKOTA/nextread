@@ -1,0 +1,141 @@
+.recommend-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  background-color: #fdfaf5;
+  min-height: 100vh;
+}
+
+.recommend-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.recommend-header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.8rem;
+  color: #2d241e;
+}
+
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); 
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.filter-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 35px;
+}
+
+.pill {
+  padding: 8px 18px;
+  border-radius: 25px;
+  border: 1px solid #8b5e3c;
+  background: white;
+  color: #8b5e3c;
+  cursor: pointer;
+  margin-right: 10px;
+  font-weight: 600;
+}
+
+
+.pill.active { background: #8b5e3c; color: white; }
+
+/* ✅ FIXED: Search bar alignment for Recommendation */
+.filter-bar {
+  display: flex;
+  justify-content: center; /* Centered */
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.search-box {
+  position: relative;
+  width: 100%;
+  max-width: 450px; /* ✅ Prevents search bar from stretching too far */
+  margin: 0 auto;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 12px 20px 12px 45px;
+  border-radius: 30px;
+  border: 1px solid #8b5e3c;
+  background: white;
+  font-size: 1rem;
+}
+
+.search-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #8b5e3c;
+}
+
+.book-card-v2 {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  height: 460px;
+  overflow: hidden;
+}
+
+.card-top {
+  height: 240px;
+  background: #f9f9f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+
+.card-top img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.card-body { padding: 15px; flex-grow: 1; }
+.genre-label { font-size: 0.75rem; color: #00a896; text-transform: uppercase; font-weight: 700; }
+.card-body h3 { font-size: 1.15rem; margin: 8px 0; color: #2d241e; }
+.author-name { color: #888; font-size: 0.9rem; }
+
+.card-actions { display: flex; border-top: 1px solid #eee; height: 55px; }
+.btn-read-now, .btn-review-card {
+  flex: 1; border: none; background: none; font-weight: 700; 
+  color: #8b5e3c; cursor: pointer; font-size: 0.85rem; border-right: 1px solid #eee;
+}
+.btn-bookmark { width: 50px; display: flex; align-items: center; justify-content: center; border: none; background: none; cursor: pointer; color: #8b5e3c; }
+
+/* ✅ MODAL STYLES */
+.custom-modal-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.7); display: flex; align-items: center; justify-content: center;
+  z-index: 2000; -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+}
+
+.custom-modal-content {
+  background: #fdfaf5; padding: 30px; border-radius: 15px; text-align: center;
+  width: 380px; border: 2px solid #8b5e3c; animation: modalPop 0.3s ease-out;
+}
+
+.modal-stars { display: flex; justify-content: center; align-items: center; gap: 8px; margin: 15px 0; }
+.modal-rating-num { font-weight: 800; font-size: 1.3rem; color: #8b5e3c; margin-left: 10px; }
+
+.modal-buttons { display: flex; justify-content: center; gap: 15px; margin-top: 15px; }
+.btn-modal-ok, .btn-modal-view {
+  border: none; padding: 10px 30px; border-radius: 20px; font-weight: 700; cursor: pointer;
+}
+.btn-modal-ok { background: #8b5e3c; color: white; }
+.btn-modal-view { background: #00a896; color: white; }
+
+
+@keyframes modalPop { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }

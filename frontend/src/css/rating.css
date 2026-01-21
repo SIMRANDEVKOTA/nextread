@@ -1,0 +1,84 @@
+.rating-container {
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+  padding-top: 10px;
+}
+
+.rating-title {
+  font-family: 'Merriweather', serif;
+  color: #3E2723;
+  margin-top: 0;
+  margin-bottom: 5px;
+  font-size: 1.8rem;
+}
+
+.rating-book-name {
+  color: #8D6E63;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 25px;
+  font-style: italic;
+}
+
+/* STARS */
+.stars-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 8px; /* Slightly tighter gap for smaller stars */
+  margin-bottom: 25px;
+}
+
+.star-icon {
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.star-icon:hover {
+  transform: scale(1.2);
+}
+
+/* TEXT AREA */
+.review-textarea {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid #EEE;
+  border-radius: 12px;
+  resize: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.95rem;
+  margin-bottom: 20px;
+  background-color: #FAFAFA;
+  transition: 0.2s;
+  outline: none;
+}
+
+.review-textarea:focus {
+  border-color: #8D6E63;
+  background-color: #FFF;
+}
+
+/* SUBMIT BUTTON */
+.submit-rating-btn {
+  background-color: #3E2723; /* Dark Coffee */
+  color: white;
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-top: 10px;
+}
+
+.submit-rating-btn:hover {
+  background-color: #5D4037; /* Lighter Coffee */
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(62, 39, 35, 0.2);
+}
+
+.submit-rating-btn:active {
+  transform: translateY(0);
+}

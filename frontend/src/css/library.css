@@ -1,0 +1,322 @@
+.library-page {
+  min-height: 100vh;
+  /* ✅ FIXED: Changed from purple gradient to theme cream */
+  background-color: #fdfaf5; 
+  padding: 30px 20px;
+}
+
+.back-btn {
+  /* ✅ FIXED: Darker background for visibility on cream */
+  background: #8b5e3c;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 30px;
+  transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+  background: #6d4a2f;
+  transform: translateX(-5px);
+}
+
+.library-header {
+  text-align: center;
+  /* ✅ FIXED: Darker text for readability on cream */
+  color: #2d241e;
+  margin-bottom: 40px;
+}
+
+.library-header h1 {
+  font-size: 2.5rem;
+  font-family: 'Playfair Display', serif;
+  margin: 0 0 30px 0;
+}
+
+.library-stats {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.stat {
+  /* ✅ FIXED: Updated to match themed look */
+  background: white;
+  border: 1px solid #8b5e3c;
+  padding: 20px 30px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.stat-number {
+  display: block;
+  font-size: 2.5rem;
+  font-weight: 700;
+  /* ✅ FIXED: Theme Brown */
+  color: #8b5e3c;
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.9rem;
+  color: #6d645e;
+  margin-top: 5px;
+}
+
+/* ✅ THE REST OF YOUR CODE REMAINS THE SAME */
+.library-section {
+  max-width: 1000px;
+  margin: 0 auto 40px;
+  background: white;
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+}
+
+.library-section h2 {
+  color: #333;
+  margin-top: 0;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #f0f0f0;
+  margin-bottom: 25px;
+}
+
+.books-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.library-item {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.library-item:hover {
+  background: #f0f0f0;
+  transform: translateX(5px);
+}
+
+.library-item.reading {
+  border-left: 4px solid #4CAF50;
+}
+
+.library-item.completed {
+  border-left: 4px solid #2196F3;
+}
+
+.book-thumb {
+  width: 80px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.item-info {
+  flex: 1;
+}
+
+.item-info h4 {
+  margin: 0 0 5px 0;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.item-info p {
+  margin: 3px 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.completed-label {
+  color: #2196F3;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.progress-section {
+  margin-top: 15px;
+}
+
+.progress-display {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #e0e0e0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.btn-edit-progress {
+  background: #667eea;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+  align-self: flex-start;
+}
+
+.btn-edit-progress:hover {
+  background: #764ba2;
+  transform: scale(1.05);
+}
+
+.progress-edit {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.progress-edit input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 2px solid #667eea;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.btn-save {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-save:hover {
+  background: #45a049;
+}
+
+.btn-cancel {
+  background: #f44336;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-cancel:hover {
+  background: #da190b;
+}
+
+.item-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-primary,
+.btn-finish,
+.btn-delete {
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-primary {
+  background: #4CAF50;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #45a049;
+  transform: scale(1.05);
+}
+
+.btn-finish {
+  background: #2196F3;
+  color: white;
+}
+
+.btn-finish:hover {
+  background: #0b7dda;
+  transform: scale(1.05);
+}
+
+.btn-delete {
+  background: #f44336;
+  color: white;
+}
+
+.btn-delete:hover {
+  background: #da190b;
+  transform: scale(1.05);
+}
+
+.empty-state {
+  text-align: center;
+  color: #999;
+  padding: 40px 20px;
+  font-style: italic;
+}
+
+/* ✅ ADDED ONLY: Modal CSS */
+.custom-modal-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 2000;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+.custom-modal-content {
+  background: #fdfaf5;
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+  width: 380px;
+  border: 2px solid #8b5e3c;
+  animation: modalPop 0.3s ease-out;
+}
+
+@keyframes modalPop {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}

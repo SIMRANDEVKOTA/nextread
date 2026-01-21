@@ -1,0 +1,69 @@
+/* =========================
+   BOOK CARD
+========================= */
+
+.book-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 14px;
+  text-align: center;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.book-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.12);
+}
+
+.book-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.book-card h4 {
+  margin: 10px 0 4px;
+  font-size: 16px;
+}
+
+.book-card p {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+}
+
+/* =========================
+   ACTION BUTTONS
+========================= */
+
+.book-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.save-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: #2563eb;
+}
+
+.read-btn {
+  background: #2563eb;
+  border: none;
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.read-btn:hover {
+  background: #1e40af;
+}
