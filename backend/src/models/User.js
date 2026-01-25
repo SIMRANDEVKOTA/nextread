@@ -21,6 +21,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      // ✅ FIXED: Added role field to match your database column
+      role: {
+        type: DataTypes.STRING,
+        defaultValue: "user",
+      },
       bio: {
         type: DataTypes.TEXT,
         defaultValue: "",

@@ -11,5 +11,9 @@ router.post("/login", authController.login);
 // Protected routes
 router.get("/profile", authMiddleware, authController.getProfile);
 router.put("/profile", authMiddleware, authController.updateProfile);
+router.get("/users", authMiddleware, authController.getAllUsers);
+
+// ✅ FIXED: Added Admin route to delete a user
+router.delete("/users/:id", authMiddleware, authController.deleteUser);
 
 module.exports = router;

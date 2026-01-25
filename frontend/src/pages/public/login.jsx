@@ -32,15 +32,20 @@ const Login = () => {
       console.log("🟢 Backend Response:", res); 
 
       if (res.token && res.user) {
-        console.log("✅ Token found! Saving and Logging in...");
+        // ✅ LOGGING ROLE FOR DEBUGGING
+        console.log("✅ User Role from DB:", res.user.role); 
         
-        // 🛑 CRITICAL FIX: Force Save Token BEFORE Navigating
         localStorage.setItem("token", res.token);
         localStorage.setItem("user", JSON.stringify(res.user));
-        // ----------------------------------------------------
 
         login(res.user, res.token);
-        navigate("/dashboard");
+
+        // ✅ REDIRECTION LOGIC
+        if (res.user.role === "admin") {
+          navigate("/admin");
+        } else {
+          navigate("/dashboard");
+        }
       } else {
         console.warn("⚠️ Token MISSING in response.");
         setServerError("Login successful, but no token received.");
