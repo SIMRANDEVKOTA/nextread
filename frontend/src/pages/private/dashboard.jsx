@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchAllBooks, addToLibrary } from "../../services/api";
+import { fetchAllBooks, addToLibrary, fetchPopularBooks } from "../../services/api"; // ✅ Added fetchPopularBooks
 import { useToast } from "../../context/ToastContext";
 import { useAuth } from "../../context/AuthContext";
-import { getBookImage } from "../../utils/bookImages";
 import { FaStar, FaBookmark, FaBookOpen, FaFire } from "react-icons/fa";
 import "../../css/dashboard.css";
 
@@ -11,23 +10,29 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const { showToast } = useToast();
   const { user } = useAuth();
-  const [books, setBooks] = useState([]);
+  const [discoverBooks, setDiscoverBooks] = useState([]); // ✅ Separated Discover
+  const [popularBooks, setPopularBooks] = useState([]);   // ✅ Separated Trending
   const [loading, setLoading] = useState(true);
   const [savedBooks, setSavedBooks] = useState(new Set());
   const [selectedBookForRating, setSelectedBookForRating] = useState(null);
 
   useEffect(() => {
-    const loadBooks = async () => {
+    const fetchData = async () => {
       try {
-        const { data } = await fetchAllBooks();
-        setBooks(data);
+        // ✅ 1. Fetches only the 5 Pinned Admin books for Trending
+        const trendingRes = await fetchPopularBooks();
+        setPopularBooks(trendingRes.data);
+
+        // ✅ 2. Fetches the standard Discover catalog
+        const catalogRes = await fetchAllBooks();
+        setDiscoverBooks(catalogRes.data.slice(0, 4)); // Only show first 4 in Discover
       } catch {
-        showToast("Failed to load books", "error");
+        showToast("Failed to load dashboard content", "error");
       } finally {
         setLoading(false);
       }
     };
-    loadBooks();
+    fetchData();
   }, [showToast]);
 
   const showRatingPopup = (book) => setSelectedBookForRating(book);
@@ -66,12 +71,8 @@ const Dashboard = () => {
 
   if (loading) return <div className="loader">Loading books...</div>;
 
-  const discoverBooks = books.slice(0, 4);
-  const popularBooks = books.slice(0, 4);
-
   return (
     <div className="dashboard-container">
-      {/* SECTION 1: Discover Books */}
       <header className="dashboard-header">
         <div className="sub-tag orange-theme">
           <FaBookOpen className="icon" /> EXPLORE ALL
@@ -84,7 +85,11 @@ const Dashboard = () => {
         {discoverBooks.map((book) => (
           <div key={book.id} className="book-card-v2">
             <div className="card-top" onClick={() => showRatingPopup(book)}>
-              <img src={getBookImage(book.cover)} alt={book.title} />
+              <img 
+                src={`http://localhost:6060/images/${book.cover}`} 
+                alt={book.title} 
+                onError={(e) => { e.target.onerror = null; e.target.src = 'http://localhost:6060/images/default-cover.jpg'; }}
+              />
             </div>
             <div className="card-body">
               <span className="genre-label">{book.genre}</span>
@@ -96,7 +101,7 @@ const Dashboard = () => {
                     <FaStar key={i} className={i < Math.round(book.rating || 0) ? "star-filled" : "star-empty"} />
                   ))}
                 </div>
-                <span className="rating-num">{book.rating?.toFixed(1) || "0.0"}</span>
+                <span className="rating-num">{book.rating ? book.rating.toFixed(1) : "0.0"}</span>
               </div>
             </div>
             <div className="card-actions">
@@ -112,7 +117,6 @@ const Dashboard = () => {
 
       <hr className="section-divider-large" />
 
-      {/* SECTION 2: Trending / Popular Section */}
       <section className="popular-section-full">
         <div className="section-header-centered">
           <span className="trending-label"><FaFire /> TRENDING NOW</span>
@@ -120,12 +124,15 @@ const Dashboard = () => {
           <p>Highest engagement and ratings over the last seven days</p>
         </div>
         
-        {/* FIXED: Using the same card structure to keep metadata and buttons outside */}
         <div className="popular-display-grid">
           {popularBooks.map(book => (
             <div key={book.id} className="book-card-v2">
               <div className="card-top" onClick={() => showRatingPopup(book)}>
-                <img src={getBookImage(book.cover)} alt={book.title} />
+                <img 
+                  src={`http://localhost:6060/images/${book.cover}`} 
+                  alt={book.title} 
+                  onError={(e) => { e.target.onerror = null; e.target.src = 'http://localhost:6060/images/default-cover.jpg'; }}
+                />
               </div>
               <div className="card-body">
                 <span className="genre-label">{book.genre}</span>
@@ -137,7 +144,8 @@ const Dashboard = () => {
                       <FaStar key={i} className={i < Math.round(book.rating || 0) ? "star-filled" : "star-empty"} />
                     ))}
                   </div>
-                  <span className="rating-num">{book.rating?.toFixed(1) || "0.0"}</span>
+                  {/* ✅ FIXED: Rating displays correctly from the pinned book data */}
+                  <span className="rating-num">{book.rating ? book.rating.toFixed(1) : "0.0"}</span>
                 </div>
               </div>
               <div className="card-actions">
@@ -152,7 +160,6 @@ const Dashboard = () => {
         </div>
       </section>
 
-      {/* Modal logic remains the same */}
       {selectedBookForRating && (
         <div className="custom-modal-overlay" onClick={closeRatingPopup}>
           <div className="custom-modal-content" onClick={(e) => e.stopPropagation()}>
@@ -161,7 +168,7 @@ const Dashboard = () => {
               {[...Array(5)].map((_, i) => (
                 <FaStar key={i} color={i < Math.round(selectedBookForRating.rating || 0) ? "#8b5e3c" : "#ddd"} size={28} />
               ))}
-              <span className="modal-rating-num">({selectedBookForRating.rating?.toFixed(1)})</span>
+              <span className="modal-rating-num">({selectedBookForRating.rating ? selectedBookForRating.rating.toFixed(1) : "0.0"})</span>
             </div>
             <div className="modal-buttons">
               <button className="btn-modal-ok" onClick={closeRatingPopup}>OK</button>

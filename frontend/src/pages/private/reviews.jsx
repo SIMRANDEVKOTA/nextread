@@ -2,7 +2,6 @@ import React, { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getReviews, addReview, fetchBookDetails } from "../../services/api";
 import { useToast } from "../../context/ToastContext";
-import { getBookImage } from "../../utils/bookImages";
 import { FaStar, FaArrowLeft, FaPaperPlane, FaUserCircle } from "react-icons/fa";
 import "../../css/reviews.css";
 
@@ -64,7 +63,15 @@ const Reviews = () => {
           <section className="book-showcase">
             <div className="sticky-book-content">
               <div className="book-poster">
-                <img src={getBookImage(book.cover)} alt={book.title} />
+                {/* ✅ FIXED: Construct the full backend URL directly to solve broken image issue */}
+                <img 
+                  src={`http://localhost:6060/images/${book.cover}`} 
+                  alt={book.title} 
+                  onError={(e) => { 
+                    e.target.onerror = null; 
+                    e.target.src = 'http://localhost:6060/images/default-cover.jpg'; 
+                  }}
+                />
               </div>
               <div className="book-meta">
                 <span className="meta-genre">{book.genre}</span>
@@ -76,6 +83,7 @@ const Reviews = () => {
                       <FaStar key={i} color={i < Math.round(book.rating) ? "#FFD700" : "#eee"} size={18}/>
                     ))}
                   </div>
+                  {/* ✅ DYNAMIC: Pulling calculated rating from backend reviews */}
                   <span className="score-num">{book.rating?.toFixed(1)} / 5.0</span>
                 </div>
               </div>

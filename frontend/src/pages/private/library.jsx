@@ -7,7 +7,6 @@ import {
   updateProgress,
 } from "../../services/api";
 import { useToast } from "../../context/ToastContext";
-import { getBookImage } from "../../utils/bookImages";
 import {
   FaArrowLeft,
   FaTrash,
@@ -23,7 +22,6 @@ const Library = () => {
   const [editingId, setEditingId] = useState(null);
   const [editingPages, setEditingPages] = useState(0);
   
-  // ✅ MODAL STATE: Replaces window.confirm and toasts
   const [modalConfig, setModalConfig] = useState({
     show: false,
     title: "",
@@ -128,7 +126,13 @@ const Library = () => {
           <div className="books-list">
             {toRead.map((book) => (
               <div key={book.id} className="library-item">
-                <img src={getBookImage(book.Book?.cover)} alt={book.Book?.title} className="book-thumb" />
+                {/* ✅ FIXED: Backend Image URL */}
+                <img 
+                  src={`http://localhost:6060/images/${book.Book?.cover}`} 
+                  alt={book.Book?.title} 
+                  className="book-thumb" 
+                  onError={(e) => e.target.src = 'http://localhost:6060/images/default-cover.jpg'}
+                />
                 <div className="item-info"><h4>{book.Book?.title}</h4><p>{book.Book?.author}</p></div>
                 <div className="item-actions">
                   <button className="btn-primary" onClick={() => handleStartReading(book)}>Read Now</button>
@@ -146,7 +150,13 @@ const Library = () => {
           <div className="books-list">
             {reading.map((book) => (
               <div key={book.id} className="library-item reading">
-                <img src={getBookImage(book.Book?.cover)} alt={book.Book?.title} className="book-thumb" />
+                {/* ✅ FIXED: Backend Image URL */}
+                <img 
+                  src={`http://localhost:6060/images/${book.Book?.cover}`} 
+                  alt={book.Book?.title} 
+                  className="book-thumb" 
+                  onError={(e) => e.target.src = 'http://localhost:6060/images/default-cover.jpg'}
+                />
                 <div className="item-info">
                   <h4>{book.Book?.title}</h4><p>{book.Book?.author}</p>
                   <div className="progress-section">
@@ -181,7 +191,13 @@ const Library = () => {
           <div className="books-list">
             {completed.map((book) => (
               <div key={book.id} className="library-item completed">
-                <img src={getBookImage(book.Book?.cover)} alt={book.Book?.title} className="book-thumb" />
+                {/* ✅ FIXED: Backend Image URL */}
+                <img 
+                  src={`http://localhost:6060/images/${book.Book?.cover}`} 
+                  alt={book.Book?.title} 
+                  className="book-thumb" 
+                  onError={(e) => e.target.src = 'http://localhost:6060/images/default-cover.jpg'}
+                />
                 <div className="item-info"><h4>{book.Book?.title}</h4><p>{book.Book?.author}</p><p className="completed-label"><FaCheck /> Completed</p></div>
                 <div className="item-actions">
                   <button className="btn-delete" onClick={() => handleDelete(book.BookId, book.Book?.title)}><FaTrash /></button>
@@ -192,7 +208,6 @@ const Library = () => {
         ) : <p className="empty-state">No completed books.</p>}
       </section>
 
-      {/* ✅ UNIFIED CUSTOM MODAL */}
       {modalConfig.show && (
         <div className="custom-modal-overlay">
           <div className="custom-modal-content">

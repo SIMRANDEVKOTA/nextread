@@ -91,10 +91,11 @@
   letter-spacing: 0.5px;
 }
 
-/* --- Stats Cards (Matches Screenshot 17.29.07) --- */
+/* --- Stats Cards --- */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  /* ✅ FIXED: Dynamic grid to accommodate the new Review and Genre cards */
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 30px;
   margin-bottom: 4rem;
 }
@@ -123,6 +124,12 @@
   text-transform: uppercase;
   font-size: 0.8rem;
   letter-spacing: 1px;
+}
+
+/* ✅ NEW: Special styling for the Review highlight card */
+.stat-card.highlight {
+  border-bottom: 5px solid #d2b48c;
+  background: linear-gradient(to bottom, #ffffff, #fdfaf6);
 }
 
 /* --- Professional Tables --- */
@@ -164,12 +171,34 @@
   font-size: 0.9rem;
 }
 
+/* --- Review Specific Styles --- */
+.rating-pill {
+    background: #fff8e1;
+    color: #fbc02d;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.comment-cell {
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #666;
+    font-style: italic;
+}
+
 /* --- Status Pills --- */
 .pill-category {
   background-color: #f5f0eb;
   color: #8b5e3c;
   padding: 6px 14px;
-  border-radius: 20px;
+  border-radius: 200px;
   font-size: 0.75rem;
   font-weight: 700;
 }
@@ -215,24 +244,7 @@
 .table-icon.delete { color: #d32f2f; }
 .table-icon:hover { background-color: #fdfaf5; }
 
-/* --- Centered Modal --- */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(45, 36, 30, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2000;
-  -webkit-backdrop-filter: blur(4px);
-  backdrop-filter: blur(4px);
-}
-
-
-/* --- Centered Modal (Fixed for Safari Compatibility) --- */
+/* --- Centered Modal Overlay --- */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -244,27 +256,157 @@
   justify-content: center;
   align-items: center;
   z-index: 2000;
-  
-  /* ✅ FIXED: Safari Compatibility */
   -webkit-backdrop-filter: blur(4px); 
   backdrop-filter: blur(4px); 
 }
 
-/* --- Category Management Specifics --- */
-.pill-category {
-  background-color: #f5f0eb; /* Soft cream accent */
-  color: #8b5e3c; /* Theme brown */
-  padding: 6px 16px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 700;
-  text-transform: capitalize;
-  display: inline-block;
-  box-shadow: 0 2px 5px rgba(139, 94, 60, 0.05);
+/* ✅ FIXED: Modal Content spacing to prevent overlap */
+.admin-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem; /* Adds space between every row */
+    padding: 1rem;
 }
 
+.form-row {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+}
+
+.form-row input {
+    flex: 1; /* Splits Title and Author evenly */
+}
+
+.admin-form textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 12px;
+    resize: none;
+    border: 1px solid #e8e2da;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+/* --- Category Management Specifics --- */
 .section-header h2 {
   color: #2d241e;
   font-size: 1.5rem;
   font-weight: 800;
+}
+/* ... keep other styles ... */
+
+/* ✅ FIXED: High-contrast visibility for local asset selection */
+.file-upload-zone p {
+    color: #4a3f35; /* Darker brown for readability */
+    font-weight: 700;
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+}
+
+.file-upload-zone select {
+    background-color: white;
+    border: 2px solid #8b5e3c; /* Theme border */
+    color: #2d241e; /* High contrast text */
+    padding: 12px;
+    font-weight: 600;
+}
+
+/* Updated Stats Grid to handle 6 cards neatly */
+.stats-grid.dashboard-enhanced {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+/* ... keep all existing styles same ... */
+
+/* ✅ FIXED: High-contrast visibility for local asset selection */
+.file-upload-zone p {
+    color: #3e332b !important; /* Deep brown for maximum readability */
+    font-weight: 800;
+    margin-bottom: 12px;
+    font-size: 1rem;
+    display: block;
+}
+
+.file-upload-zone select {
+    background-color: #ffffff;
+    border: 2px solid #8b5e3c;
+    color: #2d241e;
+    padding: 12px;
+    font-weight: 600;
+    width: 100%;
+    border-radius: 8px;
+    margin-top: 5px;
+}
+
+
+.stats-grid.dashboard-enhanced {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+/* --- Root Layout (Restored) --- */
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: #fdfaf5;
+}
+
+/* --- Fixed Sidebar (Restored to vertical) --- */
+.admin-sidebar {
+  width: 280px;
+  min-width: 280px;
+  background-color: #2d241e;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column; /* Forces vertical orientation */
+}
+
+.admin-sidebar nav {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column; /* Restores vertical buttons */
+}
+
+/* --- Modal Overlap Fix (Vertical Spacing) --- */
+.admin-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Space between every single field */
+    padding: 2rem;
+}
+
+.input-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* Space between label and box */
+}
+
+.field-label {
+    color: #2d241e !important;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* --- Centered Modal Safari Fix --- */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(45, 36, 30, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  -webkit-backdrop-filter: blur(4px); 
+  backdrop-filter: blur(4px); 
+}
+
+/* Fix visibility for category selection labels */
+.file-upload-zone p {
+    color: #2d241e !important;
+    font-weight: 800;
 }

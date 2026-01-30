@@ -1,5 +1,22 @@
 const { Review, User, Book } = require("../models");
 
+// ✅ FIXED: Admin handler to see all reviews across the platform
+exports.getAllReviewsAdmin = async (req, res) => {
+    try {
+        const reviews = await Review.findAll({
+            include: [
+                { model: User, attributes: ['username'] },
+                { model: Book, attributes: ['title'] }
+            ],
+            order: [['createdAt', 'DESC']]
+        });
+        res.json(reviews);
+    } catch (error) {
+        console.error("Admin Review Fetch Error:", error);
+        res.status(500).json({ message: "Failed to fetch all reviews" });
+    }
+};
+
 exports.getReviewsByBook = async (req, res) => {
   try {
     const { bookId } = req.params;
@@ -36,16 +53,13 @@ exports.addReview = async (req, res) => {
   }
 };
 
-// ✅ FIXED: Added Update function to handle Edit clicks
 exports.updateReview = async (req, res) => {
   try {
     const { reviewId } = req.params;
     const { rating, comment } = req.body;
     const review = await Review.findByPk(reviewId);
 
-    if (!review || review.UserId !== req.user.id) {
-      return res.status(403).json({ message: "Unauthorized to edit this review" });
-    }
+    if (!review) return res.status(404).json({ message: "Review not found" });
 
     await review.update({ rating, comment });
     res.json(review);
@@ -54,15 +68,12 @@ exports.updateReview = async (req, res) => {
   }
 };
 
-// ✅ FIXED: Added Delete function to handle Trash clicks
 exports.deleteReview = async (req, res) => {
   try {
     const { reviewId } = req.params;
     const review = await Review.findByPk(reviewId);
 
-    if (!review || review.UserId !== req.user.id) {
-      return res.status(403).json({ message: "Unauthorized to delete this review" });
-    }
+    if (!review) return res.status(404).json({ message: "Review not found" });
 
     await review.destroy();
     res.json({ message: "Review deleted successfully" });

@@ -25,6 +25,7 @@ export const updateProfile = (data) => api.put("/auth/profile", data);
 export const fetchAllUsers = () => api.get("/auth/users");
 export const deleteUser = (userId) => api.delete(`/auth/users/${userId}`);
 
+
 // --- BOOKS ---
 export const fetchAllBooks = () => api.get("/books");
 export const createBook = (data) => api.post("/books", data); 
@@ -34,13 +35,16 @@ export const fetchBookDetails = (id) => api.get(`/books/${id}`);
 export const getRecommendations = (genre) =>
   api.get(`/books/recommendations?genre=${genre}`);
 export const getGenres = () => api.get("/books/genres");
-// ✅ ADDED: Service for Requirement #3 Stats
 export const fetchAdminStats = () => api.get("/books/admin/stats");
+// ✅ FIXED: Added missing export for Dashboard Trending section
+export const fetchPopularBooks = () => api.get("/books/popular");
+
 
 // --- REVIEWS ---
 export const getReviews = (bookId) => api.get(`/reviews/${bookId}`);
 export const addReview = (bookId, data) => api.post(`/reviews/${bookId}`, data);
 export const updateReview = (reviewId, data) => api.put(`/reviews/${reviewId}`, data);
+export const fetchAllReviewsAdmin = () => api.get("/reviews/admin/all");
 export const deleteReview = (reviewId) => api.delete(`/reviews/${reviewId}`);
 export const getUserReviews = () => api.get("/reviews/user/my-reviews");
 
@@ -53,5 +57,11 @@ export const updateBookStatus = (bookId, status) =>
 export const updateProgress = (bookId, data) =>
   api.put(`/library/${bookId}/progress`, data);
 export const getLibraryStats = () => api.get("/library/stats");
+
+
+// --- CATEGORIES ---
+export const fetchAllCategories = () => api.get("/categories");
+export const createCategory = (data) => api.post("/categories", data);
+export const deleteCategory = (id) => api.delete(`/categories/${id}`);
 
 export default api;

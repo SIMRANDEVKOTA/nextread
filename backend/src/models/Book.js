@@ -17,16 +17,24 @@ module.exports = (sequelize, DataTypes) => {
     cover: {
       type: DataTypes.STRING,
     },
-    // ✅ ADDED: This fixes the 500 Error in Library/Profile tracking
+
     pages: {
       type: DataTypes.INTEGER,
       defaultValue: 300,
     },
+
     rating: {
       type: DataTypes.FLOAT,
       defaultValue: 0,
     },
+
     is_recommended: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+
+    // ✅ ADD THIS LINE (THIS WAS MISSING)
+    is_trending: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },

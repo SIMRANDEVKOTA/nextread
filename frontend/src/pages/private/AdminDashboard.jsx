@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { 
-  FaThLarge, FaBookOpen, FaTags, FaUsers, FaSignOutAlt, 
-  FaPlus, FaCheckCircle, FaTrash, FaEdit 
+  FaThLarge, FaBookOpen, FaTags, FaUsers, FaSignOutAlt, FaFire,
+  FaPlus, FaTrash, FaEdit, FaStar, FaCommentDots 
 } from "react-icons/fa";
 import { 
-  fetchAllBooks, fetchAllUsers, deleteBook, deleteUser, fetchAdminStats 
+  fetchAllBooks, fetchAllUsers, deleteBook, deleteUser, fetchAdminStats,
+  fetchAllReviewsAdmin, deleteReview, fetchAllCategories, deleteCategory, updateBook 
 } from "../../services/api"; 
 import { useToast } from "../../context/ToastContext";
 import AddBookModal from "../../components/AddBookModal"; 
 import EditBookModal from "../../components/EditBookModal";
+import AddCategoryModal from "../../components/AddCategoryModal"; 
 import DeleteConfirmModal from "../../components/DeleteConfirmModal"; 
 import "../../css/admin.css";
 
@@ -16,11 +18,14 @@ const AdminDashboard = () => {
   const [activeSection, setActiveSection] = useState("overview");
   const [books, setBooks] = useState([]);
   const [users, setUsers] = useState([]);
-  const [stats, setStats] = useState({ totalUsers: 0, totalBooks: 0, activeReaders: 0 });
+  const [reviews, setReviews] = useState([]);
+  const [categories, setCategories] = useState([]); 
+  const [stats, setStats] = useState({ totalUsers: 0, totalBooks: 0, totalReviews: 0 });
   const [loading, setLoading] = useState(true);
   
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false); 
   const [editBookData, setEditBookData] = useState(null);
   const [deleteConfig, setDeleteConfig] = useState({ isOpen: false, type: "", id: null, name: "" });
 
@@ -29,17 +34,16 @@ const AdminDashboard = () => {
   const loadData = useCallback(async () => {
     setLoading(true);
     try {
-      // ✅ FIXED: Parallel load including Admin Stats
-      const [bookRes, userRes, statsRes] = await Promise.all([
-        fetchAllBooks(), 
-        fetchAllUsers(),
-        fetchAdminStats()
+      const [bookRes, userRes, statsRes, reviewRes, catRes] = await Promise.all([
+        fetchAllBooks(), fetchAllUsers(), fetchAdminStats(),
+        fetchAllReviewsAdmin(), fetchAllCategories() 
       ]);
       setBooks(bookRes.data);
       setUsers(userRes.data);
       setStats(statsRes.data);
-    } catch (err) {
-      console.error(err);
+      setReviews(reviewRes.data);
+      setCategories(catRes.data); 
+    } catch {
       showToast("System error: Could not sync admin data", "error");
     } finally {
       setLoading(false);
@@ -48,30 +52,29 @@ const AdminDashboard = () => {
 
   useEffect(() => { loadData(); }, [loadData]);
 
-  const openDeleteModal = (type, id, name) => {
-    setDeleteConfig({ isOpen: true, type, id, name });
+  const handleToggleTrending = async (book) => {
+    try {
+      await updateBook(book.id, { is_trending: !book.is_trending });
+      showToast(!book.is_trending ? "Pinned to Trending" : "Removed from Trending", "success");
+      loadData(); 
+    } catch {
+      showToast("Update failed", "error");
+    }
   };
 
   const handleConfirmDelete = async () => {
     try {
-      if (deleteConfig.type === "book") {
-        await deleteBook(deleteConfig.id);
-      } else {
-        await deleteUser(deleteConfig.id);
-      }
-      showToast(`${deleteConfig.type === "book" ? "Book" : "User"} deleted successfully`, "success");
+      if (deleteConfig.type === "book") await deleteBook(deleteConfig.id);
+      else if (deleteConfig.type === "user") await deleteUser(deleteConfig.id);
+      else if (deleteConfig.type === "review") await deleteReview(deleteConfig.id);
+      else if (deleteConfig.type === "category") await deleteCategory(deleteConfig.id);
+      showToast(`${deleteConfig.type} deleted successfully`, "success");
       loadData(); 
-    } catch (error) {
-      console.error("Delete failed:", error);
+    } catch {
       showToast(`Error deleting ${deleteConfig.type}`, "error");
     } finally {
       setDeleteConfig({ isOpen: false, type: "", id: null, name: "" });
     }
-  };
-
-  const handleEditClick = (book) => {
-    setEditBookData(book);
-    setIsEditModalOpen(true);
   };
 
   if (loading) return <div className="loader">Initializing Admin Panel...</div>;
@@ -79,96 +82,72 @@ const AdminDashboard = () => {
   return (
     <div className="admin-layout">
       <aside className="admin-sidebar">
-        <div className="admin-logo">
-          <span className="logo-icon">NR</span>
-          <h2>Admin Panel</h2>
-        </div>
+        <div className="admin-logo"><h2>Admin Panel</h2></div>
         <nav>
-          <button className={activeSection === "overview" ? "active" : ""} onClick={() => setActiveSection("overview")}>
-            <FaThLarge /> Overview
-          </button>
-          <button className={activeSection === "books" ? "active" : ""} onClick={() => setActiveSection("books")}>
-            <FaBookOpen /> Book Management
-          </button>
-          <button className={activeSection === "categories" ? "active" : ""} onClick={() => setActiveSection("categories")}>
-            <FaTags /> Categories
-          </button>
-          <button className={activeSection === "users" ? "active" : ""} onClick={() => setActiveSection("users")}>
-            <FaUsers /> User Management
-          </button>
+          <button className={activeSection === "overview" ? "active" : ""} onClick={() => setActiveSection("overview")}><FaThLarge /> Overview</button>
+          <button className={activeSection === "books" ? "active" : ""} onClick={() => setActiveSection("books")}><FaBookOpen /> Book Management</button>
+          <button className={activeSection === "trending" ? "active" : ""} onClick={() => setActiveSection("trending")}><FaFire /> Trending Status</button>
+          <button className={activeSection === "reviews" ? "active" : ""} onClick={() => setActiveSection("reviews")}><FaCommentDots /> Reviews</button>
+          <button className={activeSection === "categories" ? "active" : ""} onClick={() => setActiveSection("categories")}><FaTags /> Categories</button>
+          <button className={activeSection === "users" ? "active" : ""} onClick={() => setActiveSection("users")}><FaUsers /> User Management</button>
         </nav>
-        <button className="logout-nav" onClick={() => {
-          localStorage.clear();
-          window.location.href = "/login";
-        }}>
-          <FaSignOutAlt /> Logout
-        </button>
+        <button className="logout-nav" onClick={() => { localStorage.clear(); window.location.href = "/login"; }}><FaSignOutAlt /> Logout</button>
       </aside>
 
       <main className="admin-main">
-        <header className="admin-top-bar">
-          <h3>{activeSection.toUpperCase()}</h3>
-          <div className="admin-user-info">Logged in as: <strong>Admin</strong></div>
-        </header>
+        {/* ✅ ONLY LIVE SITE BUTTON REMOVED */}
+        <header className="admin-top-bar"><h3>{activeSection.toUpperCase()}</h3></header>
 
         <section className="admin-view-content">
           {activeSection === "overview" && (
-            <div className="stats-grid">
+            <div className="stats-grid dashboard-enhanced">
               <div className="stat-card"><h3>{stats.totalBooks}</h3><p>Books</p></div>
               <div className="stat-card"><h3>{stats.totalUsers}</h3><p>Registered Users</p></div>
-              <div className="stat-card"><h3>{stats.activeReaders}</h3><p>Reading Now</p></div>
+              <div className="stat-card highlight"><h3>{stats.totalReviews}</h3><p><FaStar /> Total Reviews</p></div>
             </div>
           )}
 
           {activeSection === "books" && (
             <div className="table-container">
-              <div className="section-header">
-                <h2>Manage Books</h2>
-                <button className="add-btn" onClick={() => setIsModalOpen(true)}>
-                  <FaPlus /> Add New Book
-                </button>
-              </div>
+              <div className="section-header"><h2>Manage Books</h2><button className="add-btn-primary" onClick={() => setIsModalOpen(true)}><FaPlus /> Add New Book</button></div>
               <table className="admin-table">
-                <thead><tr><th>ID</th><th>Title</th><th>Genre</th><th>Status</th><th>Actions</th></tr></thead>
-                <tbody>
-                  {books.map(book => (
-                    <tr key={book.id}>
-                      <td>#{book.id}</td>
-                      <td>{book.title}</td>
-                      <td><span className="pill-category">{book.genre}</span></td>
-                      <td><span className="status-live"><FaCheckCircle /> Published</span></td>
-                      <td>
-                        <button className="table-icon edit" onClick={() => handleEditClick(book)}><FaEdit /></button>
-                        <button className="table-icon delete" onClick={() => openDeleteModal("book", book.id, book.title)}><FaTrash /></button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
+                <thead><tr><th>ID</th><th>Title</th><th>Avg Rating</th><th>Actions</th></tr></thead>
+                {/* ✅ REVIEWS COLUMN REMOVED */}
+                <tbody>{books.map(book => (<tr key={book.id}><td>#{book.id}</td><td>{book.title}</td><td><FaStar color="#FFD700" /> {book.rating?.toFixed(1) || "0.0"}</td><td><button className="table-icon edit" onClick={() => { setEditBookData(book); setIsEditModalOpen(true); }}><FaEdit /></button><button className="table-icon delete" onClick={() => setDeleteConfig({isOpen: true, type: "book", id: book.id, name: book.title})}><FaTrash /></button></td></tr>))}</tbody>
+              </table>
+            </div>
+          )}
+
+          {activeSection === "trending" && (
+             <div className="table-container">
+               <div className="section-header"><h2>Trending Management</h2></div>
+               <table className="admin-table">
+                 <thead><tr><th>Book Title</th><th>Rating</th><th>Trending Status</th></tr></thead>
+                 <tbody>{books.map(book => (<tr key={book.id}><td>{book.title}</td><td>{book.rating?.toFixed(1)} ⭐</td><td>
+                    <button className={`trending-toggle-btn ${book.is_trending ? 'active' : ''}`} onClick={() => handleToggleTrending(book)}>
+                      {book.is_trending ? "Remove from Trending" : "Add to Trending"}
+                    </button>
+                  </td></tr>))}</tbody>
+               </table>
+             </div>
+          )}
+
+          {activeSection === "reviews" && (
+            <div className="table-container">
+              <div className="section-header"><h2>Review Moderation</h2></div>
+              <table className="admin-table">
+                <thead><tr><th>Book</th><th>User</th><th>Rating</th><th className="comment-header">Full Review</th><th>Actions</th></tr></thead>
+                <tbody>{reviews.map(review => (<tr key={review.id}><td><strong>{review.Book?.title}</strong></td><td>@{review.User?.username}</td><td><FaStar /> {review.rating}</td><td className="comment-cell-full">{review.comment}</td><td><button className="table-icon delete" onClick={() => setDeleteConfig({isOpen: true, type: "review", id: review.id, name: "review"})}><FaTrash /></button></td></tr>))}</tbody>
               </table>
             </div>
           )}
 
           {activeSection === "categories" && (
             <div className="table-container">
-              <div className="section-header">
-                <h2>Genre Management</h2>
-                <button className="add-btn" onClick={() => showToast("Add Category coming soon!", "info")}>
-                  <FaPlus /> Add New Category
-                </button>
-              </div>
+              <div className="section-header"><h2>Genre Management</h2><button className="add-btn-primary" onClick={() => setIsCategoryModalOpen(true)}><FaPlus /> Add Category</button></div>
               <table className="admin-table">
                 <thead><tr><th>Genre Name</th><th>Actions</th></tr></thead>
-                <tbody>
-                  {[...new Set(books.map(b => b.genre))].map((genre, idx) => (
-                    <tr key={idx}>
-                      <td><span className="pill-category">{genre}</span></td>
-                      <td>
-                        <button className="table-icon edit"><FaEdit /></button>
-                        <button className="table-icon delete" onClick={() => openDeleteModal("category", idx, genre)}><FaTrash /></button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
+                <tbody>{categories.map((cat) => (<tr key={cat.id}><td><span className="pill-category">{cat.name}</span></td><td><button className="table-icon delete" onClick={() => setDeleteConfig({isOpen: true, type: "category", id: cat.id, name: cat.name})}><FaTrash /></button></td></tr>))}</tbody>
               </table>
             </div>
           )}
@@ -178,43 +157,17 @@ const AdminDashboard = () => {
               <div className="section-header"><h2>User Management</h2></div>
               <table className="admin-table">
                 <thead><tr><th>ID</th><th>Username</th><th>Email</th><th>Role</th><th>Actions</th></tr></thead>
-                <tbody>
-                  {users.map(user => (
-                    <tr key={user.id}>
-                      <td>#{user.id}</td>
-                      <td>{user.username}</td>
-                      <td>{user.email}</td>
-                      <td><span className="pill-category">{user.role}</span></td>
-                      <td>
-                        <button className="table-icon edit"><FaEdit /></button>
-                        <button className="table-icon delete" onClick={() => openDeleteModal("user", user.id, user.username)}><FaTrash /></button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
+                <tbody>{users.map(user => (<tr key={user.id}><td>#{user.id}</td><td>{user.username}</td><td>{user.email}</td><td><span className="pill-category">{user.role}</span></td><td><button className="table-icon delete" onClick={() => setDeleteConfig({isOpen: true, type: "user", id: user.id, name: user.username})}><FaTrash /></button></td></tr>))}</tbody>
               </table>
             </div>
           )}
         </section>
       </main>
 
-      <AddBookModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onRefresh={loadData} />
-      
-      {/* ✅ FIXED: Key Pattern forces clean state reset */}
-      <EditBookModal 
-        key={editBookData?.id || 'new-edit'}
-        isOpen={isEditModalOpen} 
-        onClose={() => setIsEditModalOpen(false)} 
-        onRefresh={loadData}
-        book={editBookData}
-      />
-
-      <DeleteConfirmModal 
-        isOpen={deleteConfig.isOpen} 
-        onClose={() => setDeleteConfig({ ...deleteConfig, isOpen: false })} 
-        onConfirm={handleConfirmDelete}
-        itemName={deleteConfig.name}
-      />
+      <AddBookModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onRefresh={loadData} categories={categories} />
+      <EditBookModal key={editBookData?.id || 'new-edit'} isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} onRefresh={loadData} book={editBookData} />
+      <AddCategoryModal isOpen={isCategoryModalOpen} onClose={() => setIsCategoryModalOpen(false)} onRefresh={loadData} /> 
+      <DeleteConfirmModal isOpen={deleteConfig.isOpen} onClose={() => setDeleteConfig({ ...deleteConfig, isOpen: false })} onConfirm={handleConfirmDelete} itemName={deleteConfig.name} />
     </div>
   );
 };

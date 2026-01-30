@@ -2,7 +2,6 @@ import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { getProfile, getUserReviews, deleteReview, updateReview } from "../../services/api";
 import { FaArrowLeft, FaUserCircle, FaEdit, FaTrash, FaStar, FaTimes } from "react-icons/fa";
-import { getBookImage } from "../../utils/bookImages";
 import "../../css/profile.css"; 
 
 const Profile = () => {
@@ -72,7 +71,6 @@ const Profile = () => {
 
   return (
     <div className="profile-page">
-      {/* FIXED: Back button now matches the library style */}
       <button className="back-btn" onClick={() => navigate(-1)}>
         <FaArrowLeft /> Back
       </button>
@@ -91,7 +89,13 @@ const Profile = () => {
               userReviews.map((rev) => (
                 <div key={rev.id} className="prof-review-card-modern">
                   <div className="prof-book-info-col">
-                    <img src={getBookImage(rev.Book?.cover)} alt="book" className="prof-rev-img-large" />
+                    {/* ✅ FIXED: Backend Image URL */}
+                    <img 
+                      src={`http://localhost:6060/images/${rev.Book?.cover}`} 
+                      alt="book" 
+                      className="prof-rev-img-large" 
+                      onError={(e) => e.target.src = 'http://localhost:6060/images/default-cover.jpg'}
+                    />
                     <h3 className="prof-book-title-sub">{rev.Book?.title}</h3>
                     <div className="prof-stars-sub">
                       {[...Array(5)].map((_, i) => (

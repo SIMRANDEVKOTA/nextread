@@ -1,16 +1,20 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import bookImage from "../../assets/images/book.jpg"; 
+// ✅ REMOVED: import bookImage from "../../assets/images/book.jpg";
 import "../../css/home.css";
 import { FaBookOpen, FaMagic } from "react-icons/fa";
 
 const Home = ({ isLoggedIn }) => {
+  // ✅ FIXED: Using the backend URL instead of a local asset import
+  const bookImageUrl = "http://localhost:6060/images/book.jpg";
+
   return (
     <main className="home">
       <section
         className="hero"
         style={{
-          backgroundImage: `url(${bookImage})`,
+          // ✅ FIXED: Using the variable for the background image
+          backgroundImage: `url(${bookImageUrl})`,
           backgroundColor: "#1a1a1a", 
         }}
       >
@@ -24,7 +28,7 @@ const Home = ({ isLoggedIn }) => {
 
             <h1 className="hero-title">
               Where Top Reads 
-              <span className="highlight">Meet Trusted Reviews</span>
+              <span className="highlight"> Meet Trusted Reviews</span>
             </h1>
 
             <p className="hero-subtitle">

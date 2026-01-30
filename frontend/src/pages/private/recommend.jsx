@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { getGenres, getRecommendations, addToLibrary, fetchAllBooks } from "../../services/api";
 import { useToast } from "../../context/ToastContext";
 import { useAuth } from "../../context/AuthContext";
-import { getBookImage } from "../../utils/bookImages";
 import { FaStar, FaBookmark, FaRegBookmark, FaSearch, FaBookOpen, FaArrowLeft } from "react-icons/fa";
 import "../../css/recommend.css";
 
@@ -85,7 +84,6 @@ const Recommend = () => {
 
   return (
     <div className="recommend-container">
-      {/* FIXED: Back button added to recommend page */}
       <button className="back-btn" onClick={() => navigate(-1)}>
         <FaArrowLeft /> Back
       </button>
@@ -129,7 +127,12 @@ const Recommend = () => {
           {filteredBooks.map((book) => (
             <div key={book.id} className="book-card-v2">
               <div className="card-top" onClick={() => showRatingPopup(book)} style={{ cursor: 'pointer' }}>
-                <img src={getBookImage(book.cover)} alt={book.title} />
+                {/* ✅ FIXED: Backend Image URL */}
+                <img 
+                  src={`http://localhost:6060/images/${book.cover}`} 
+                  alt={book.title} 
+                  onError={(e) => e.target.src = 'http://localhost:6060/images/default-cover.jpg'}
+                />
               </div>
               
               <div className="card-body">

@@ -61,7 +61,15 @@ const BookCard = ({ book, onRate, layout }) => {
       onClick={() => navigate(`/reviews/${book.id}`)}
     >
       <div className="card-img-container">
-        <img src={book.image} alt={book.title} />
+        {/* ✅ FIXED: Now correctly pulls from the backend server URL */}
+        <img 
+          src={`http://localhost:6060/images/${book.cover}`} 
+          alt={book.title} 
+          onError={(e) => { 
+            e.target.onerror = null; 
+            e.target.src = 'http://localhost:6060/images/default-cover.jpg'; 
+          }} 
+        />
 
         <button
           className={`save-icon-btn ${saved ? "saved" : ""}`}
@@ -82,7 +90,8 @@ const BookCard = ({ book, onRate, layout }) => {
             onRate(book);
           }}
         >
-          <FaStar /> {book.rating}
+          {/* ✅ DYNAMIC: Pulling calculated rating from backend reviews */}
+          <FaStar /> {book.rating || "0.0"}
         </button>
 
         <div className="card-footer-btns">

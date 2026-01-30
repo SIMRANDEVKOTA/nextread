@@ -5,23 +5,31 @@ const adminMiddleware = require("../middlewares/adminMiddleware");
 
 const router = express.Router();
 
-// Public routes
-router.get("/", bookController.getAllBooks);
-router.get("/genres", bookController.getGenres);
-router.get("/recommendations", bookController.getRecommendations);
+/* ---------- ADMIN ROUTES (Must come before /:id) ---------- */
 
-// ✅ FIXED: Admin Stats MUST be above parametric /:id route
 router.get("/admin/stats", authMiddleware, adminMiddleware, bookController.getAdminStats);
 
-router.get("/reviews/user", authMiddleware, bookController.getUserReviews);
-router.get("/:id", bookController.getBookById);
+/* ---------- PUBLIC ROUTES ---------- */
 
-// Protected routes
+router.get("/featured", bookController.getFeaturedBooks);
+router.get("/popular", bookController.getPopularBooks);
+router.get("/genres", bookController.getGenres);
+router.get("/recommendations", bookController.getRecommendations);
+router.get("/", bookController.getAllBooks);
+
+/* ---------- PROTECTED USER ROUTES (⚠️ MUST BE BEFORE :id) ---------- */
+
+router.get("/reviews/user", authMiddleware, bookController.getUserReviews);
 router.post("/:id/reviews", authMiddleware, bookController.addReview);
-router.put("/reviews/:reviewId", authMiddleware, bookController.updateReview);
 router.delete("/reviews/:reviewId", authMiddleware, bookController.deleteReview);
 
-// ✅ FIXED: Admin Protected routes
+/* ---------- SINGLE BOOK (⚠️ KEEP THIS LAST) ---------- */
+
+router.get("/:id", bookController.getBookById);
+
+/* ---------- ADMIN ACTIONS ---------- */
+
+router.post("/", authMiddleware, adminMiddleware, bookController.addBook);
 router.put("/:id", authMiddleware, adminMiddleware, bookController.updateBook);
 router.delete("/:id", authMiddleware, adminMiddleware, bookController.deleteBook);
 
