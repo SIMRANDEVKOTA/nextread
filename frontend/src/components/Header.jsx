@@ -1,9 +1,10 @@
-
+//this is for header component, it is used in App.jsx and it is a common component 
+// that is used in all pages. It contains the logo, navigation links and search bar. 
+// It also contains the sign in button.
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../css/Header.css';
 import logoIcon from '../assets/images/logo-icon.png'; // Add your logo icon here
-
 const Header = () => {
   return (
     <header className="header">

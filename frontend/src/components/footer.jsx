@@ -1,3 +1,6 @@
+//this is for footer component, it is used in App.jsx and it is a common component that 
+// is used in all pages. It contains the logo, description, social media links, quick links and community links.
+//  It also contains the copyright and legal links.
 import React from "react";
 import { Link } from "react-router-dom";
 import { FaBookOpen, FaInstagram, FaTwitter, FaFacebookF } from "react-icons/fa";
