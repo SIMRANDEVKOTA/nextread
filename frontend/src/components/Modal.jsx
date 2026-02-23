@@ -1,3 +1,8 @@
+//this is a reusable modal component that can be used for both warning
+//  and success messages. It takes in props for the title, message, 
+// onConfirm and onCancel functions, and the type of modal (warning or success). 
+// The modal will display an appropriate icon based on the type and will 
+// have buttons for confirming or canceling the action.
 import React from "react";
 import { FaExclamationTriangle, FaCheckCircle, FaTimes } from "react-icons/fa";
 import "../css/modal.css";

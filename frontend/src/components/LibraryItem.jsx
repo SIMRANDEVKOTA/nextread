@@ -1,4 +1,6 @@
-
+//this component represents an individual book item in the user's library.
+// It displays the book's cover, title, author, and reading status. 
+// If the book is currently being read, it also shows a progress bar and a button to mark it as completed.
 import React, { useState } from "react";
 import { FaBookOpen } from "react-icons/fa";
 import RatingModal from "./rating";

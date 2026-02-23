@@ -1,4 +1,4 @@
-
+//this component is a modal that allows users to rate a book and leave a review.
 import React, { useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { useLibrary } from "../hooks/useLibrary";

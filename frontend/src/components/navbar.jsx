@@ -1,3 +1,6 @@
+//this component is the navigation bar for the application. 
+// It displays different links and options based on whether the user is logged
+//  in or not.
 import React, { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext"; 
