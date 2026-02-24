@@ -36,7 +36,6 @@ export const getRecommendations = (genre) =>
   api.get(`/books/recommendations?genre=${genre}`);
 export const getGenres = () => api.get("/books/genres");
 export const fetchAdminStats = () => api.get("/books/admin/stats");
-// ✅ FIXED: Added missing export for Dashboard Trending section
 export const fetchPopularBooks = () => api.get("/books/popular");
 
 
@@ -45,8 +44,13 @@ export const getReviews = (bookId) => api.get(`/reviews/${bookId}`);
 export const addReview = (bookId, data) => api.post(`/reviews/${bookId}`, data);
 export const updateReview = (reviewId, data) => api.put(`/reviews/${reviewId}`, data);
 export const fetchAllReviewsAdmin = () => api.get("/reviews/admin/all");
+
+/* ✅ ADDED THIS FUNCTION (REQUIRED FOR DASHBOARD) */
+export const fetchAllReviews = () => api.get("/reviews");
+
 export const deleteReview = (reviewId) => api.delete(`/reviews/${reviewId}`);
 export const getUserReviews = () => api.get("/reviews/user/my-reviews");
+
 
 // --- LIBRARY ---
 export const getMyLibrary = () => api.get("/library");

@@ -1,12 +1,10 @@
 .library-page {
   min-height: 100vh;
-  /* ✅ FIXED: Changed from purple gradient to theme cream */
   background-color: #fdfaf5; 
   padding: 30px 20px;
 }
 
 .back-btn {
-  /* ✅ FIXED: Darker background for visibility on cream */
   background: #8b5e3c;
   color: white;
   border: none;
@@ -28,7 +26,6 @@
 
 .library-header {
   text-align: center;
-  /* ✅ FIXED: Darker text for readability on cream */
   color: #2d241e;
   margin-bottom: 40px;
 }
@@ -47,7 +44,6 @@
 }
 
 .stat {
-  /* ✅ FIXED: Updated to match themed look */
   background: white;
   border: 1px solid #8b5e3c;
   padding: 20px 30px;
@@ -60,7 +56,6 @@
   display: block;
   font-size: 2.5rem;
   font-weight: 700;
-  /* ✅ FIXED: Theme Brown */
   color: #8b5e3c;
 }
 
@@ -71,7 +66,6 @@
   margin-top: 5px;
 }
 
-/* ✅ THE REST OF YOUR CODE REMAINS THE SAME */
 .library-section {
   max-width: 1000px;
   margin: 0 auto 40px;
@@ -82,7 +76,7 @@
 }
 
 .library-section h2 {
-  color: #333;
+  color: #2d241e;
   margin-top: 0;
   padding-bottom: 20px;
   border-bottom: 2px solid #f0f0f0;
@@ -100,22 +94,22 @@
   gap: 20px;
   align-items: center;
   padding: 20px;
-  background: #f9f9f9;
+  background: #fdfcfb;
   border-radius: 10px;
   transition: all 0.3s ease;
 }
 
 .library-item:hover {
-  background: #f0f0f0;
+  background: #f9f7f4;
   transform: translateX(5px);
 }
 
 .library-item.reading {
-  border-left: 4px solid #4CAF50;
+  border-left: 4px solid #8b5e3c;
 }
 
 .library-item.completed {
-  border-left: 4px solid #2196F3;
+  border-left: 4px solid #a89982;
 }
 
 .book-thumb {
@@ -132,18 +126,19 @@
 
 .item-info h4 {
   margin: 0 0 5px 0;
-  color: #333;
+  color: #2d241e;
   font-size: 1.1rem;
 }
 
 .item-info p {
   margin: 3px 0;
-  color: #666;
+  color: #7a6f66; 
   font-size: 0.9rem;
+  font-style: italic;
 }
 
 .completed-label {
-  color: #2196F3;
+  color: #8b5e3c;
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -171,17 +166,17 @@
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #667eea, #764ba2);
+  background: #8b5e3c; 
   transition: width 0.3s ease;
 }
 
 .progress-text {
   font-size: 0.85rem;
-  color: #666;
+  color: #6d645e;
 }
 
 .btn-edit-progress {
-  background: #667eea;
+  background: #8b5e3c; 
   color: white;
   border: none;
   padding: 8px 16px;
@@ -193,7 +188,7 @@
 }
 
 .btn-edit-progress:hover {
-  background: #764ba2;
+  background: #6d4a2f;
   transform: scale(1.05);
 }
 
@@ -206,37 +201,29 @@
 .progress-edit input {
   flex: 1;
   padding: 8px 12px;
-  border: 2px solid #667eea;
+  border: 2px solid #a89982;
   border-radius: 6px;
   font-size: 0.9rem;
 }
 
 .btn-save {
-  background: #4CAF50;
+  background: #8b5e3c;
   color: white;
   border: none;
   padding: 8px 16px;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.3s ease;
-}
-
-.btn-save:hover {
-  background: #45a049;
 }
 
 .btn-cancel {
-  background: #f44336;
-  color: white;
+  background: #d2ccc4; 
+  color: #2d241e;
   border: none;
   padding: 8px 16px;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.3s ease;
-}
-
-.btn-cancel:hover {
-  background: #da190b;
 }
 
 .item-actions {
@@ -259,32 +246,33 @@
 }
 
 .btn-primary {
-  background: #4CAF50;
+  background: #8b5e3c;
   color: white;
 }
 
 .btn-primary:hover {
-  background: #45a049;
+  background: #a08545;
   transform: scale(1.05);
 }
 
+/* CHANGED: Finish button to Deep Terracotta - rich, warm, and fits the brown theme better */
 .btn-finish {
-  background: #2196F3;
+  background: #a65d37; 
   color: white;
 }
 
 .btn-finish:hover {
-  background: #0b7dda;
+  background: #8a4a2a;
   transform: scale(1.05);
 }
 
 .btn-delete {
-  background: #f44336;
-  color: white;
+  background: #d2ccc4;
+  color: #8b5e3c;
 }
 
 .btn-delete:hover {
-  background: #da190b;
+  background: #c4bbb0;
   transform: scale(1.05);
 }
 
@@ -295,7 +283,6 @@
   font-style: italic;
 }
 
-/* ✅ ADDED ONLY: Modal CSS */
 .custom-modal-overlay {
   position: fixed;
   top: 0; left: 0; width: 100%; height: 100%;
@@ -313,10 +300,23 @@
   text-align: center;
   width: 380px;
   border: 2px solid #8b5e3c;
-  animation: modalPop 0.3s ease-out;
 }
 
-@keyframes modalPop {
-  from { opacity: 0; transform: scale(0.8); }
-  to { opacity: 1; transform: scale(1); }
+.btn-confirm-act {
+  background: #8b5e3c;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.btn-cancel-act {
+  background: #d2ccc4;
+  color: #2d241e;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
 }

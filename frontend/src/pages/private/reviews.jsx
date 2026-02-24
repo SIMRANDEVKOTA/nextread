@@ -16,9 +16,13 @@ const Reviews = () => {
   const [hover, setHover] = useState(null);
   const [newReview, setNewReview] = useState({ rating: 5, comment: "" });
 
+  const calculatedRating = reviews.length > 0 
+    ? reviews.reduce((acc, rev) => acc + Number(rev.rating), 0) / reviews.length 
+    : 0;
+
   const loadData = useCallback(async () => {
     setLoading(true);
-    try {
+    try { 
       const [bookRes, reviewsRes] = await Promise.all([
         fetchBookDetails(id),
         getReviews(id)
@@ -63,7 +67,6 @@ const Reviews = () => {
           <section className="book-showcase">
             <div className="sticky-book-content">
               <div className="book-poster">
-                {/* ✅ FIXED: Construct the full backend URL directly to solve broken image issue */}
                 <img 
                   src={`http://localhost:6060/images/${book.cover}`} 
                   alt={book.title} 
@@ -77,14 +80,21 @@ const Reviews = () => {
                 <span className="meta-genre">{book.genre}</span>
                 <h1>{book.title}</h1>
                 <p className="meta-author">by <span>{book.author}</span></p>
+                
                 <div className="overall-score">
                   <div className="score-stars">
                     {[...Array(5)].map((_, i) => (
-                      <FaStar key={i} color={i < Math.round(book.rating) ? "#FFD700" : "#eee"} size={18}/>
+                      <FaStar 
+                        key={i} 
+                        // ✅ CHANGED: Star color to Yellow
+                        color={i < Math.round(calculatedRating) ? "#FFD700" : "#eee"} 
+                        size={18}
+                      />
                     ))}
                   </div>
-                  {/* ✅ DYNAMIC: Pulling calculated rating from backend reviews */}
-                  <span className="score-num">{book.rating?.toFixed(1)} / 5.0</span>
+                  <span className="score-num">
+                    {calculatedRating > 0 ? calculatedRating.toFixed(1) : "0.0"} / 5.0
+                  </span>
                 </div>
               </div>
             </div>
@@ -108,6 +118,7 @@ const Reviews = () => {
                         />
                         <FaStar 
                           className="input-star"
+                          // ✅ CHANGED: Input Star color to Yellow
                           color={ratingValue <= (hover || newReview.rating) ? "#FFD700" : "#e4e4e4"}
                           onMouseEnter={() => setHover(ratingValue)}
                           onMouseLeave={() => setHover(null)}
@@ -136,25 +147,32 @@ const Reviews = () => {
                 <span className="count">{reviews.length} Reviews</span>
               </div>
 
-              {reviews.map((rev) => (
+              {reviews.length > 0 ? reviews.map((rev) => (
                 <div key={rev.id} className="user-review-card">
                   <div className="user-avatar">
-                    <FaUserCircle size={32}/>
+                    <FaUserCircle size={32} color="#8b5e3c"/>
                   </div>
                   <div className="review-content-area">
                     <div className="rev-user-info">
                       <strong>{rev.User?.username || "Reader"}</strong>
                       <div className="user-rev-stars">
                         {[...Array(5)].map((_, i) => (
-                          <FaStar key={i} size={12} color={i < rev.rating ? "#FFD700" : "#eee"} />
+                          <FaStar 
+                            key={i} 
+                            size={12} 
+                            // ✅ CHANGED: Feed star color to Yellow
+                            color={i < rev.rating ? "#FFD700" : "#eee"} 
+                          />
                         ))}
                       </div>
                     </div>
                     <p className="rev-text">{rev.comment}</p>
-                    <span className="rev-date">{new Date(rev.createdAt).toLocaleDateString()}</span>
+                    <span className="rev-date">
+                      {new Date(rev.createdAt).toLocaleDateString()}
+                    </span>
                   </div>
                 </div>
-              ))}
+              )) : <p className="empty-reviews">No reviews yet. Be the first to share your thoughts!</p>}
             </div>
           </section>
         </div>

@@ -40,6 +40,8 @@
 .admin-sidebar nav {
   padding-top: 1.5rem;
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .admin-sidebar button, .logout-nav {
@@ -92,11 +94,10 @@
 }
 
 /* --- Stats Cards --- */
-.stats-grid {
+.stats-grid.dashboard-enhanced {
   display: grid;
-  /* ✅ FIXED: Dynamic grid to accommodate the new Review and Genre cards */
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 30px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
   margin-bottom: 4rem;
 }
 
@@ -126,12 +127,6 @@
   letter-spacing: 1px;
 }
 
-/* ✅ NEW: Special styling for the Review highlight card */
-.stat-card.highlight {
-  border-bottom: 5px solid #d2b48c;
-  background: linear-gradient(to bottom, #ffffff, #fdfaf6);
-}
-
 /* --- Professional Tables --- */
 .table-container {
   background: white;
@@ -145,6 +140,12 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
+}
+
+.section-header h2 {
+  color: #2d241e;
+  font-size: 1.5rem;
+  font-weight: 800;
 }
 
 .admin-table {
@@ -171,64 +172,7 @@
   font-size: 0.9rem;
 }
 
-/* --- Review Specific Styles --- */
-.rating-pill {
-    background: #fff8e1;
-    color: #fbc02d;
-    padding: 4px 10px;
-    border-radius: 6px;
-    font-weight: 700;
-    font-size: 0.85rem;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-}
-
-.comment-cell {
-    max-width: 300px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    color: #666;
-    font-style: italic;
-}
-
-/* --- Status Pills --- */
-.pill-category {
-  background-color: #f5f0eb;
-  color: #8b5e3c;
-  padding: 6px 14px;
-  border-radius: 200px;
-  font-size: 0.75rem;
-  font-weight: 700;
-}
-
-.status-live {
-  color: #2e7d32;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-weight: 600;
-  font-size: 0.85rem;
-}
-
-/* --- Buttons --- */
-.add-btn {
-  background-color: #8b5e3c;
-  color: white;
-  border: none;
-  padding: 0.8rem 1.5rem;
-  border-radius: 10px;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  transition: 0.3s;
-}
-
-.add-btn:hover { background-color: #6d4a30; }
-
+/* Table Icons - Fixed to Brown Theme */
 .table-icon {
   background: none;
   border: none;
@@ -241,172 +185,314 @@
 }
 
 .table-icon.edit { color: #8b5e3c; }
-.table-icon.delete { color: #d32f2f; }
-.table-icon:hover { background-color: #fdfaf5; }
+.table-icon.delete { color: #8b5e3c; opacity: 0.6; }
+.table-icon.delete:hover { color: #2d241e; opacity: 1; }
 
-/* --- Centered Modal Overlay --- */
+.pill-category {
+  background-color: #f5f0eb;
+  color: #8b5e3c;
+  padding: 6px 14px;
+  border-radius: 200px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* --- COMPACT MODAL SYSTEM (Externalized) --- */
 .modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(45, 36, 30, 0.7); /* Deep brown overlay */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2000;
-  -webkit-backdrop-filter: blur(4px); 
-  backdrop-filter: blur(4px); 
-}
-
-/* ✅ FIXED: Modal Content spacing to prevent overlap */
-.admin-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.2rem; /* Adds space between every row */
-    padding: 1rem;
-}
-
-.form-row {
-    display: flex;
-    gap: 1rem;
-    width: 100%;
-}
-
-.form-row input {
-    flex: 1; /* Splits Title and Author evenly */
-}
-
-.admin-form textarea {
-    width: 100%;
-    min-height: 120px;
-    padding: 12px;
-    resize: none;
-    border: 1px solid #e8e2da;
-    border-radius: 8px;
-    box-sizing: border-box;
-}
-
-/* --- Category Management Specifics --- */
-.section-header h2 {
-  color: #2d241e;
-  font-size: 1.5rem;
-  font-weight: 800;
-}
-/* ... keep other styles ... */
-
-/* ✅ FIXED: High-contrast visibility for local asset selection */
-.file-upload-zone p {
-    color: #4a3f35; /* Darker brown for readability */
-    font-weight: 700;
-    margin-bottom: 12px;
-    font-size: 0.95rem;
-}
-
-.file-upload-zone select {
-    background-color: white;
-    border: 2px solid #8b5e3c; /* Theme border */
-    color: #2d241e; /* High contrast text */
-    padding: 12px;
-    font-weight: 600;
-}
-
-/* Updated Stats Grid to handle 6 cards neatly */
-.stats-grid.dashboard-enhanced {
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
-}
-/* ... keep all existing styles same ... */
-
-/* ✅ FIXED: High-contrast visibility for local asset selection */
-.file-upload-zone p {
-    color: #3e332b !important; /* Deep brown for maximum readability */
-    font-weight: 800;
-    margin-bottom: 12px;
-    font-size: 1rem;
-    display: block;
-}
-
-.file-upload-zone select {
-    background-color: #ffffff;
-    border: 2px solid #8b5e3c;
-    color: #2d241e;
-    padding: 12px;
-    font-weight: 600;
-    width: 100%;
-    border-radius: 8px;
-    margin-top: 5px;
-}
-
-
-.stats-grid.dashboard-enhanced {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
-}
-
-/* --- Root Layout (Restored) --- */
-.admin-layout {
-  display: flex;
-  min-height: 100vh;
-  background-color: #fdfaf5;
-}
-
-/* --- Fixed Sidebar (Restored to vertical) --- */
-.admin-sidebar {
-  width: 280px;
-  min-width: 280px;
-  background-color: #2d241e;
-  height: 100vh;
-  position: sticky;
-  top: 0;
-  display: flex;
-  flex-direction: column; /* Forces vertical orientation */
-}
-
-.admin-sidebar nav {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column; /* Restores vertical buttons */
-}
-
-/* --- Modal Overlap Fix (Vertical Spacing) --- */
-.admin-form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px; /* Space between every single field */
-    padding: 2rem;
-}
-
-.input-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 8px; /* Space between label and box */
-}
-
-.field-label {
-    color: #2d241e !important;
-    font-weight: 700;
-    margin: 0;
-}
-
-/* --- Centered Modal Safari Fix --- */
-.modal-overlay {
-  position: fixed;
-  top: 0; left: 0;
+  position: fixed; 
+  top: 0; left: 0; 
   width: 100vw; height: 100vh;
-  background: rgba(45, 36, 30, 0.7);
-  display: flex;
-  justify-content: center;
+  background: rgba(45, 36, 30, 0.7); /* Deep brown overlay */
+  display: flex; 
+  justify-content: center; 
   align-items: center;
-  z-index: 2000;
-  -webkit-backdrop-filter: blur(4px); 
-  backdrop-filter: blur(4px); 
+  z-index: 3000; 
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
 }
 
-/* Fix visibility for category selection labels */
-.file-upload-zone p {
-    color: #2d241e !important;
-    font-weight: 800;
+/* The Professional Small Pop-up */
+.delete-modal-compact {
+  background: white;
+  width: 320px;
+  padding: 2rem;
+  border-radius: 16px;
+  text-align: center;
+  position: relative;
+  border-top: 5px solid #8b5e3c; /* Brand accent border */
+  box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+}
+
+/* Header fix for Add and Edit Modals */
+.modal-header-small {
+  display: flex;
+  justify-content: space-between; /* Pushes H2 to left, Close button to right */
+  align-items: center;
+  margin-bottom: 1.2rem;
+  border-bottom: 1px solid #f0ede9;
+  padding-bottom: 10px;
+}
+
+.modal-header-small h2 {
+  font-size: 1.1rem;
+  color: #2d241e;
+  margin: 0;
+}
+
+.close-x {
+  background: none;
+  border: none;
+  color: #a89f94;
+  cursor: pointer;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.close-x:hover {
+  color: #8b5e3c;
+}
+
+.close-x-top {
+  position: absolute; 
+  top: 15px; 
+  right: 15px;
+  background: none; 
+  border: none; 
+  color: #ccc; 
+  cursor: pointer; 
+  font-size: 1.1rem;
+  transition: 0.2s;
+}
+
+.close-x-top:hover { color: #8b5e3c; }
+
+.danger-icon-brown {
+  color: #8b5e3c; 
+  font-size: 2.2rem; 
+  margin-bottom: 12px;
+}
+
+.delete-info h3 { 
+  font-size: 1.1rem; 
+  color: #2d241e; 
+  margin: 0 0 8px 0; 
+}
+
+.delete-info p { 
+  font-size: 0.85rem; 
+  color: #666; 
+  margin-bottom: 20px; 
+  line-height: 1.4;
+}
+
+.compact-actions {
+  display: grid; 
+  grid-template-columns: 1fr 1fr; 
+  gap: 10px;
+}
+
+.btn-cancel {
+  background: #f5f0eb; 
+  border: none; 
+  padding: 10px;
+  border-radius: 8px; 
+  color: #8b5e3c; 
+  font-weight: 700; 
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-cancel:hover { background: #e8e2da; }
+
+.btn-confirm-brown {
+  background: #2d241e; 
+  border: none; 
+  padding: 10px;
+  border-radius: 8px; 
+  color: white; 
+  font-weight: 700; 
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-confirm-brown:hover { 
+  background: #000; 
+  transform: translateY(-1px);
+}
+
+/* Add/Edit Compact Layouts */
+.modal-content-compact {
+  background: white; 
+  width: 420px; 
+  padding: 1.5rem; 
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.admin-form-compact { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 15px; 
+}
+
+.compact-grid { 
+  display: grid; 
+  grid-template-columns: 1fr 1fr; 
+  gap: 12px; 
+}
+
+.input-group { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 5px; 
+}
+
+.input-group label { 
+  font-size: 0.75rem; 
+  font-weight: 800; 
+  color: #8b5e3c; 
+  text-transform: uppercase; 
+  letter-spacing: 0.5px;
+}
+
+.input-group input, 
+.input-group select, 
+.input-group textarea {
+  padding: 10px; 
+  border: 1px solid #e8e2da; 
+  border-radius: 6px; 
+  font-size: 0.85rem;
+  font-family: inherit;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.input-group input:focus { border-color: #8b5e3c; }
+
+/* Custom class for the Save/Submit button */
+.btn-primary-small, .btn-submit-compact {
+  background: #8b5e3c;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 5px;
+  transition: background 0.2s;
+}
+
+.btn-primary-small:hover, .btn-submit-compact:hover {
+  background: #2d241e;
+}
+
+/* Cover Picker Styling for consistency */
+.cover-picker-small {
+  background: #fdfaf5;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #e8e2da;
+}
+
+.picker-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #2d241e;
+  margin-bottom: 8px;
+}
+/* Force modal centering & correct size */
+.modal-overlay {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Match screenshot-1 compact card */
+.modal-content-compact {
+  width: 420px;
+  background: #fff;
+  padding: 1.8rem;
+  border-radius: 14px;
+  border-top: 5px solid #8b5e3c;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+}
+
+/* Header alignment like screenshot-1 */
+.modal-header-small {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.2rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid #eee;
+}
+
+.modal-header-small h2 {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #2d241e;
+}
+
+/* Close button (X) */
+.close-x {
+  font-size: 1.2rem;
+  color: #999;
+  cursor: pointer;
+}
+
+.close-x:hover {
+  color: #8b5e3c;
+}
+
+/* Form spacing */
+.admin-form-compact {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Input group alignment */
+.input-group label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #8b5e3c;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.input-group input {
+  padding: 12px;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  border: 1px solid #e0d8cf;
+}
+
+.input-group input:focus {
+  border-color: #8b5e3c;
+  outline: none;
+}
+
+/* Full-width primary button like screenshot */
+.btn-submit-compact {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  background: #8b5e3c;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.btn-submit-compact:hover {
+  background: #2d241e;
+  transform: translateY(-1px);
 }

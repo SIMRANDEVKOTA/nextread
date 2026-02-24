@@ -4,13 +4,16 @@ const reviewController = require("../controllers/reviewController");
 const authMiddleware = require("../middlewares/authMiddleware");
 const adminMiddleware = require("../middlewares/adminMiddleware");
 
+// ✅ Public route to fetch ALL reviews (for Dashboard ratings)
+router.get("/", reviewController.getAllReviews);
+
 // Get all reviews for the logged-in user
 router.get("/user/my-reviews", authMiddleware, reviewController.getUserReviews);
 
-// ✅ FIXED: Admin route to fetch all reviews across the platform
+// Admin route to fetch all reviews across the platform
 router.get("/admin/all", authMiddleware, adminMiddleware, reviewController.getAllReviewsAdmin);
 
-// Public routes
+// Public route: reviews by book
 router.get("/:bookId", reviewController.getReviewsByBook);
 
 // Protected routes

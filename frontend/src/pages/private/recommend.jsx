@@ -1,6 +1,12 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { getGenres, getRecommendations, addToLibrary, fetchAllBooks } from "../../services/api";
+import { 
+  getGenres, 
+  getRecommendations, 
+  addToLibrary, 
+  fetchAllBooks, 
+  fetchAllReviews // ✅ Added this
+} from "../../services/api";
 import { useToast } from "../../context/ToastContext";
 import { useAuth } from "../../context/AuthContext";
 import { FaStar, FaBookmark, FaRegBookmark, FaSearch, FaBookOpen, FaArrowLeft } from "react-icons/fa";
@@ -13,18 +19,32 @@ const Recommend = () => {
   const [genres, setGenres] = useState([]);
   const [selectedGenre, setSelectedGenre] = useState("All");
   const [books, setBooks] = useState([]);
+  const [reviews, setReviews] = useState([]); // ✅ Added to store reviews
   const [loading, setLoading] = useState(false);
   const [savedBooks, setSavedBooks] = useState(new Set());
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedBookForRating, setSelectedBookForRating] = useState(null);
 
+  // ✅ Calculation logic for ratings
+  const getAvgRating = (bookId) => {
+    if (!reviews || !Array.isArray(reviews)) return 0;
+    const bookReviews = reviews.filter(
+      r => r.book_id === bookId || r.BookId === bookId || r.bookId === bookId
+    );
+    if (bookReviews.length === 0) return 0;
+    const sum = bookReviews.reduce((acc, r) => acc + Number(r.rating || 0), 0);
+    return sum / bookReviews.length;
+  };
+
   const loadRecommendations = useCallback(async (genre) => {
     setLoading(true);
     try {
-      const { data } = genre === "All" 
-        ? await fetchAllBooks() 
-        : await getRecommendations(genre);
-      setBooks(data);
+      const [bookRes, reviewRes] = await Promise.all([
+        genre === "All" ? fetchAllBooks() : getRecommendations(genre),
+        fetchAllReviews() // ✅ Fetch reviews to sync ratings
+      ]);
+      setBooks(bookRes?.data || []);
+      setReviews(reviewRes?.data || []);
     } catch {
       showToast("Failed to load recommendations", "error");
     } finally {
@@ -47,8 +67,8 @@ const Recommend = () => {
     loadGenres();
   }, [loadGenres]);
 
-  const showRatingPopup = (book) => {
-    setSelectedBookForRating(book);
+  const showRatingPopup = (book, dynamicRating) => {
+    setSelectedBookForRating({ ...book, dynamicRating });
   };
 
   const closeRatingPopup = () => {
@@ -124,40 +144,42 @@ const Recommend = () => {
         <div className="loader">Searching for books...</div>
       ) : (
         <div className="book-grid">
-          {filteredBooks.map((book) => (
-            <div key={book.id} className="book-card-v2">
-              <div className="card-top" onClick={() => showRatingPopup(book)} style={{ cursor: 'pointer' }}>
-                {/* ✅ FIXED: Backend Image URL */}
-                <img 
-                  src={`http://localhost:6060/images/${book.cover}`} 
-                  alt={book.title} 
-                  onError={(e) => e.target.src = 'http://localhost:6060/images/default-cover.jpg'}
-                />
-              </div>
-              
-              <div className="card-body">
-                <span className="genre-label">{book.genre}</span>
-                <h3>{book.title}</h3>
-                <p className="author-name">by {book.author}</p>
-                <div className="rating-row">
-                  <div className="stars">
-                    {[...Array(5)].map((_, i) => (
-                      <FaStar key={i} className={i < Math.round(book.rating) ? "star-filled" : "star-empty"} />
-                    ))}
+          {filteredBooks.map((book) => {
+            const rating = getAvgRating(book.id); // ✅ Calculate dynamic rating
+            return (
+              <div key={book.id} className="book-card-v2">
+                <div className="card-top" onClick={() => showRatingPopup(book, rating)} style={{ cursor: 'pointer' }}>
+                  <img 
+                    src={`http://localhost:6060/images/${book.cover}`} 
+                    alt={book.title} 
+                    onError={(e) => e.target.src = 'http://localhost:6060/images/default-cover.jpg'}
+                  />
+                </div>
+                
+                <div className="card-body">
+                  <span className="genre-label">{book.genre}</span>
+                  <h3>{book.title}</h3>
+                  <p className="author-name">by {book.author}</p>
+                  <div className="rating-row">
+                    <div className="stars">
+                      {[...Array(5)].map((_, i) => (
+                        <FaStar key={i} className={i < Math.round(rating) ? "star-filled" : "star-empty"} />
+                      ))}
+                    </div>
+                    <span className="rating-num">{rating > 0 ? rating.toFixed(1) : "0.0"}</span>
                   </div>
-                  <span className="rating-num">{book.rating?.toFixed(1)}</span>
+                </div>
+
+                <div className="card-actions">
+                  <button className="btn-read-now" onClick={() => handleRead(book)}>Read Now</button>
+                  <button className="btn-review-card" onClick={() => navigate(`/reviews/${book.id}`)}>Review</button>
+                  <button className="btn-bookmark" onClick={() => handleSave(book)}>
+                    {savedBooks.has(book.id) ? <FaBookmark color="#8b5e3c" /> : <FaRegBookmark color="#ccc" />}
+                  </button>
                 </div>
               </div>
-
-              <div className="card-actions">
-                <button className="btn-read-now" onClick={() => handleRead(book)}>Read Now</button>
-                <button className="btn-review-card" onClick={() => navigate(`/reviews/${book.id}`)}>Review</button>
-                <button className="btn-bookmark" onClick={() => handleSave(book)}>
-                  {savedBooks.has(book.id) ? <FaBookmark color="#8b5e3c" /> : <FaRegBookmark color="#ccc" />}
-                </button>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
@@ -170,11 +192,13 @@ const Recommend = () => {
               {[...Array(5)].map((_, i) => (
                 <FaStar
                   key={i}
-                  color={i < Math.round(selectedBookForRating.rating || 0) ? "#8b5e3c" : "#ddd"}
+                  color={i < Math.round(selectedBookForRating.dynamicRating || 0) ? "#8b5e3c" : "#ddd"}
                   size={28}
                 />
               ))}
-              <span className="modal-rating-num">({selectedBookForRating.rating?.toFixed(1)})</span>
+              <span className="modal-rating-num">
+                ({selectedBookForRating.dynamicRating ? selectedBookForRating.dynamicRating.toFixed(1) : "0.0"})
+              </span>
             </div>
             <div className="modal-buttons">
               <button className="btn-modal-ok" onClick={closeRatingPopup}>OK</button>

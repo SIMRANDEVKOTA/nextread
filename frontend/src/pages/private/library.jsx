@@ -14,13 +14,48 @@ import {
 } from "react-icons/fa";
 import "../../css/library.css";
 
+// ✅ FIXED: Isolated Component with string-state to allow backspacing and prevent "0100"
+const ProgressEditor = ({ book, onSave, onCancel }) => {
+  const [pages, setPages] = useState(book.currentPage.toString());
+
+  const handleInputChange = (e) => {
+    let val = e.target.value;
+    
+    // Remove leading zeros (prevents 0100)
+    if (val.length > 1 && val.startsWith("0")) {
+      val = val.replace(/^0+/, "");
+    }
+    
+    // Allow digits or empty string (for backspacing)
+    if (val === "" || /^\d+$/.test(val)) {
+      setPages(val);
+    }
+  };
+
+  return (
+    <div className="progress-edit">
+      <input 
+        type="text" 
+        inputMode="numeric"
+        value={pages} 
+        onChange={handleInputChange}
+        placeholder="0"
+        autoFocus
+      />
+      <button className="btn-save" onClick={() => onSave(parseInt(pages || 0, 10))}>Save</button>
+      <button className="btn-cancel" onClick={onCancel}>Cancel</button>
+    </div>
+  );
+};
+
 const Library = () => {
   const navigate = useNavigate();
   const { showToast } = useToast();
   const [library, setLibrary] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [editingId, setEditingId] = useState(null);
-  const [editingPages, setEditingPages] = useState(0);
+  
+  // ✅ TRACK BY BookId - This is guaranteed to be unique for each book
+  const [editingBookId, setEditingBookId] = useState(null); 
   
   const [modalConfig, setModalConfig] = useState({
     show: false,
@@ -78,11 +113,12 @@ const Library = () => {
     });
   };
 
-  const handleUpdateProgress = async (book) => {
+  const handleUpdateProgress = async (bookId, newPages) => {
     try {
-      await updateProgress(book.BookId, { currentPage: editingPages });
-      setEditingId(null);
+      await updateProgress(bookId, { currentPage: newPages });
+      setEditingBookId(null);
       loadLibrary();
+      showToast("Progress updated", "success");
     } catch {
       showToast("Failed to update progress", "error");
     }
@@ -125,8 +161,7 @@ const Library = () => {
         {toRead.length > 0 ? (
           <div className="books-list">
             {toRead.map((book) => (
-              <div key={book.id} className="library-item">
-                {/* ✅ FIXED: Backend Image URL */}
+              <div key={book.BookId} className="library-item">
                 <img 
                   src={`http://localhost:6060/images/${book.Book?.cover}`} 
                   alt={book.Book?.title} 
@@ -149,8 +184,7 @@ const Library = () => {
         {reading.length > 0 ? (
           <div className="books-list">
             {reading.map((book) => (
-              <div key={book.id} className="library-item reading">
-                {/* ✅ FIXED: Backend Image URL */}
+              <div key={book.BookId} className="library-item reading">
                 <img 
                   src={`http://localhost:6060/images/${book.Book?.cover}`} 
                   alt={book.Book?.title} 
@@ -160,17 +194,20 @@ const Library = () => {
                 <div className="item-info">
                   <h4>{book.Book?.title}</h4><p>{book.Book?.author}</p>
                   <div className="progress-section">
-                    {editingId === book.id ? (
-                      <div className="progress-edit">
-                        <input type="number" min="0" max={book.totalPages} value={editingPages} onChange={(e) => setEditingPages(Number(e.target.value))} />
-                        <button className="btn-save" onClick={() => handleUpdateProgress(book)}>Save</button>
-                        <button className="btn-cancel" onClick={() => setEditingId(null)}>Cancel</button>
-                      </div>
+                    {/* ✅ FIXED: Using BookId for strict uniqueness check */}
+                    {editingBookId === book.BookId ? (
+                      <ProgressEditor 
+                        book={book} 
+                        onSave={(newPages) => handleUpdateProgress(book.BookId, newPages)} 
+                        onCancel={() => setEditingBookId(null)} 
+                      />
                     ) : (
                       <div className="progress-display">
-                        <div className="progress-bar"><div className="progress-fill" style={{ width: `${(book.currentPage / book.totalPages) * 100}%` }}></div></div>
+                        <div className="progress-bar">
+                          <div className="progress-fill" style={{ width: `${(book.currentPage / (book.totalPages || 1)) * 100}%` }}></div>
+                        </div>
                         <span className="progress-text">{book.currentPage} / {book.totalPages} pages</span>
-                        <button className="btn-edit-progress" onClick={() => { setEditingId(book.id); setEditingPages(book.currentPage); }}>Update Progress</button>
+                        <button className="btn-edit-progress" onClick={() => setEditingBookId(book.BookId)}>Update Progress</button>
                       </div>
                     )}
                   </div>
@@ -190,15 +227,17 @@ const Library = () => {
         {completed.length > 0 ? (
           <div className="books-list">
             {completed.map((book) => (
-              <div key={book.id} className="library-item completed">
-                {/* ✅ FIXED: Backend Image URL */}
+              <div key={book.BookId} className="library-item completed">
                 <img 
                   src={`http://localhost:6060/images/${book.Book?.cover}`} 
                   alt={book.Book?.title} 
                   className="book-thumb" 
                   onError={(e) => e.target.src = 'http://localhost:6060/images/default-cover.jpg'}
                 />
-                <div className="item-info"><h4>{book.Book?.title}</h4><p>{book.Book?.author}</p><p className="completed-label"><FaCheck /> Completed</p></div>
+                <div className="item-info">
+                  <h4>{book.Book?.title}</h4><p>{book.Book?.author}</p>
+                  <p className="completed-label"><FaCheck /> Completed</p>
+                </div>
                 <div className="item-actions">
                   <button className="btn-delete" onClick={() => handleDelete(book.BookId, book.Book?.title)}><FaTrash /></button>
                 </div>
@@ -213,9 +252,9 @@ const Library = () => {
           <div className="custom-modal-content">
             <h3>{modalConfig.title}</h3>
             <p>{modalConfig.message}</p>
-            <div className="modal-btns" style={{display: 'flex', justifyContent: 'center', gap: '15px', marginTop: '20px'}}>
-              <button className="btn-confirm-act" onClick={modalConfig.onConfirm} style={{background: '#8b5e3c', color: 'white', border: 'none', padding: '10px 25px', borderRadius: '20px', cursor: 'pointer', fontWeight: '700'}}>Confirm</button>
-              <button className="btn-cancel-act" onClick={() => setModalConfig({ ...modalConfig, show: false })} style={{background: '#ddd', color: '#333', border: 'none', padding: '10px 25px', borderRadius: '20px', cursor: 'pointer', fontWeight: '700'}}>Cancel</button>
+            <div className="modal-btns">
+              <button className="btn-confirm-act" onClick={modalConfig.onConfirm}>Confirm</button>
+              <button className="btn-cancel-act" onClick={() => setModalConfig({ ...modalConfig, show: false })}>Cancel</button>
             </div>
           </div>
         </div>

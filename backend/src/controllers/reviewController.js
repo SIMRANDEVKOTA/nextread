@@ -1,20 +1,37 @@
 const { Review, User, Book } = require("../models");
 
+// ✅ Public: Get all reviews (for Dashboard ratings)
+exports.getAllReviews = async (req, res) => {
+  try {
+    const reviews = await Review.findAll({
+      include: [
+        { model: User, attributes: ["username"] },
+        { model: Book, attributes: ["title", "cover"] },
+      ],
+      order: [["createdAt", "DESC"]],
+    });
+    res.json(reviews);
+  } catch (error) {
+    console.error("Public Review Fetch Error:", error);
+    res.status(500).json({ message: "Failed to fetch reviews", error: error.message });
+  }
+};
+
 // ✅ FIXED: Admin handler to see all reviews across the platform
 exports.getAllReviewsAdmin = async (req, res) => {
-    try {
-        const reviews = await Review.findAll({
-            include: [
-                { model: User, attributes: ['username'] },
-                { model: Book, attributes: ['title'] }
-            ],
-            order: [['createdAt', 'DESC']]
-        });
-        res.json(reviews);
-    } catch (error) {
-        console.error("Admin Review Fetch Error:", error);
-        res.status(500).json({ message: "Failed to fetch all reviews" });
-    }
+  try {
+    const reviews = await Review.findAll({
+      include: [
+        { model: User, attributes: ["username"] },
+        { model: Book, attributes: ["title"] },
+      ],
+      order: [["createdAt", "DESC"]],
+    });
+    res.json(reviews);
+  } catch (error) {
+    console.error("Admin Review Fetch Error:", error);
+    res.status(500).json({ message: "Failed to fetch all reviews" });
+  }
 };
 
 exports.getReviewsByBook = async (req, res) => {
@@ -24,7 +41,7 @@ exports.getReviewsByBook = async (req, res) => {
       where: { BookId: bookId },
       include: [
         { model: User, attributes: ["username"] },
-        { model: Book, attributes: ["title", "cover"] } 
+        { model: Book, attributes: ["title", "cover"] },
       ],
       order: [["createdAt", "DESC"]],
     });
@@ -38,7 +55,7 @@ exports.addReview = async (req, res) => {
   try {
     const { bookId } = req.params;
     const { rating, comment } = req.body;
-    const userId = req.user.id; 
+    const userId = req.user.id;
 
     const review = await Review.create({
       rating,

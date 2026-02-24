@@ -3,7 +3,6 @@ import { FaTimes, FaImage } from 'react-icons/fa';
 import { createBook } from '../services/api';
 import { useToast } from '../context/ToastContext';
 
-// ✅ UPDATED: Included Binding 13 and other backend images
 const availableCovers = [
     { name: 'It Ends With Us', fileName: 'ends.jpeg' },
     { name: 'The Housemaid', fileName: 'housemaid.jpeg' },
@@ -43,30 +42,47 @@ const AddBookModal = ({ isOpen, onClose, onRefresh, categories }) => {
 
     return (
         <div className="modal-overlay">
-            <div className="modal-content admin-theme">
-                <div className="modal-header"><h2>Add New Book to Library</h2><button onClick={onClose} className="close-btn"><FaTimes /></button></div>
-                <form className="admin-form" onSubmit={handleSubmit}>
-                    <div className="input-wrapper"><label className="field-label">Book Title</label><input name="title" type="text" value={formData.title} onChange={handleChange} required /></div>
-                    <div className="input-wrapper"><label className="field-label">Author Name</label><input name="author" type="text" value={formData.author} onChange={handleChange} required /></div>
-                    <div className="input-wrapper">
-                        <label className="field-label">Genre</label>
+            <div className="modal-content-compact">
+                <div className="modal-header-small">
+                    <h2>Add New Book</h2>
+                    <button onClick={onClose} className="close-x"><FaTimes /></button>
+                </div>
+                <form className="admin-form-compact" onSubmit={handleSubmit}>
+                    <div className="compact-grid">
+                        <div className="input-group">
+                            <label>Title</label>
+                            <input name="title" type="text" value={formData.title} onChange={handleChange} required />
+                        </div>
+                        <div className="input-group">
+                            <label>Author</label>
+                            <input name="author" type="text" value={formData.author} onChange={handleChange} required />
+                        </div>
+                    </div>
+
+                    <div className="input-group">
+                        <label>Genre</label>
                         <select name="genre" value={formData.genre} onChange={handleChange} required>
-                            <option value="">-- Select Category --</option>
+                            <option value="">-- Select --</option>
                             {categories.map((cat) => <option key={cat.id} value={cat.name}>{cat.name}</option>)}
                         </select>
                     </div>
-                    <div className="input-wrapper"><label className="field-label">Description</label><textarea name="description" rows="4" value={formData.description} onChange={handleChange}></textarea></div>
-                    <div className="file-upload-zone">
-                        <FaImage style={{ fontSize: '20px', color: '#8b5e3c', marginBottom: '8px' }} />
-                        <p>Select Cover from Local Assets</p>
+
+                    <div className="input-group">
+                        <label>Description</label>
+                        <textarea name="description" rows="2" value={formData.description} onChange={handleChange}></textarea>
+                    </div>
+
+                    <div className="cover-picker-small">
+                        <div className="picker-label"><FaImage /> <span>Cover Asset</span></div>
                         <select name="coverImage" value={formData.coverImage} onChange={handleChange} required>
-                            <option value="">-- Choose an Image --</option>
+                            <option value="">Choose file...</option>
                             {availableCovers.map((cover, index) => (
                                 <option key={index} value={cover.fileName}>{cover.name}</option>
                             ))}
                         </select>
                     </div>
-                    <button type="submit" className="submit-admin-btn">Publish to Library</button>
+                    
+                    <button type="submit" className="btn-primary-small">Publish Book</button>
                 </form>
             </div>
         </div>

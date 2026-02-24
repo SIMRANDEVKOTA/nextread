@@ -95,7 +95,6 @@ const AdminDashboard = () => {
       </aside>
 
       <main className="admin-main">
-        {/* ✅ ONLY LIVE SITE BUTTON REMOVED */}
         <header className="admin-top-bar"><h3>{activeSection.toUpperCase()}</h3></header>
 
         <section className="admin-view-content">
@@ -112,8 +111,25 @@ const AdminDashboard = () => {
               <div className="section-header"><h2>Manage Books</h2><button className="add-btn-primary" onClick={() => setIsModalOpen(true)}><FaPlus /> Add New Book</button></div>
               <table className="admin-table">
                 <thead><tr><th>ID</th><th>Title</th><th>Avg Rating</th><th>Actions</th></tr></thead>
-                {/* ✅ REVIEWS COLUMN REMOVED */}
-                <tbody>{books.map(book => (<tr key={book.id}><td>#{book.id}</td><td>{book.title}</td><td><FaStar color="#FFD700" /> {book.rating?.toFixed(1) || "0.0"}</td><td><button className="table-icon edit" onClick={() => { setEditBookData(book); setIsEditModalOpen(true); }}><FaEdit /></button><button className="table-icon delete" onClick={() => setDeleteConfig({isOpen: true, type: "book", id: book.id, name: book.title})}><FaTrash /></button></td></tr>))}</tbody>
+                <tbody>{books.map(book => {
+                    // CALCULATION LOGIC: Find reviews for this book
+                    const bookReviews = reviews.filter(r => r.book_id === book.id || r.BookId === book.id);
+                    const avgRating = bookReviews.length > 0 
+                      ? (bookReviews.reduce((sum, r) => sum + Number(r.rating), 0) / bookReviews.length).toFixed(1)
+                      : "0.0";
+
+                    return (
+                      <tr key={book.id}>
+                          <td>#{book.id}</td>
+                          <td>{book.title}</td>
+                          <td><FaStar color="#FFD700" /> {avgRating}</td>
+                          <td>
+                              <button className="table-icon edit" onClick={() => { setEditBookData(book); setIsEditModalOpen(true); }}><FaEdit /></button>
+                              <button className="table-icon delete" onClick={() => setDeleteConfig({isOpen: true, type: "book", id: book.id, name: book.title})}><FaTrash /></button>
+                          </td>
+                      </tr>
+                    )
+                })}</tbody>
               </table>
             </div>
           )}
@@ -123,11 +139,24 @@ const AdminDashboard = () => {
                <div className="section-header"><h2>Trending Management</h2></div>
                <table className="admin-table">
                  <thead><tr><th>Book Title</th><th>Rating</th><th>Trending Status</th></tr></thead>
-                 <tbody>{books.map(book => (<tr key={book.id}><td>{book.title}</td><td>{book.rating?.toFixed(1)} ⭐</td><td>
-                    <button className={`trending-toggle-btn ${book.is_trending ? 'active' : ''}`} onClick={() => handleToggleTrending(book)}>
-                      {book.is_trending ? "Remove from Trending" : "Add to Trending"}
-                    </button>
-                  </td></tr>))}</tbody>
+                 <tbody>{books.map(book => {
+                    const bookReviews = reviews.filter(r => r.book_id === book.id || r.BookId === book.id);
+                    const avgRating = bookReviews.length > 0 
+                      ? (bookReviews.reduce((sum, r) => sum + Number(r.rating), 0) / bookReviews.length).toFixed(1)
+                      : "0.0";
+
+                    return (
+                      <tr key={book.id}>
+                        <td>{book.title}</td>
+                        <td>{avgRating} ⭐</td>
+                        <td>
+                          <button className={`trending-toggle-btn ${book.is_trending ? 'active' : ''}`} onClick={() => handleToggleTrending(book)}>
+                            {book.is_trending ? "Remove from Trending" : "Add to Trending"}
+                          </button>
+                        </td>
+                      </tr>
+                    )
+                  })}</tbody>
                </table>
              </div>
           )}
@@ -137,7 +166,7 @@ const AdminDashboard = () => {
               <div className="section-header"><h2>Review Moderation</h2></div>
               <table className="admin-table">
                 <thead><tr><th>Book</th><th>User</th><th>Rating</th><th className="comment-header">Full Review</th><th>Actions</th></tr></thead>
-                <tbody>{reviews.map(review => (<tr key={review.id}><td><strong>{review.Book?.title}</strong></td><td>@{review.User?.username}</td><td><FaStar /> {review.rating}</td><td className="comment-cell-full">{review.comment}</td><td><button className="table-icon delete" onClick={() => setDeleteConfig({isOpen: true, type: "review", id: review.id, name: "review"})}><FaTrash /></button></td></tr>))}</tbody>
+                <tbody>{reviews.map(review => (<tr key={review.id}><td><strong>{review.Book?.title}</strong></td><td>@{review.User?.username}</td><td><FaStar color="#FFA000" /> {review.rating}</td><td className="comment-cell-full">{review.comment}</td><td><button className="table-icon delete" onClick={() => setDeleteConfig({isOpen: true, type: "review", id: review.id, name: "this review"})}><FaTrash /></button></td></tr>))}</tbody>
               </table>
             </div>
           )}
@@ -164,10 +193,34 @@ const AdminDashboard = () => {
         </section>
       </main>
 
-      <AddBookModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onRefresh={loadData} categories={categories} />
-      <EditBookModal key={editBookData?.id || 'new-edit'} isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} onRefresh={loadData} book={editBookData} />
-      <AddCategoryModal isOpen={isCategoryModalOpen} onClose={() => setIsCategoryModalOpen(false)} onRefresh={loadData} /> 
-      <DeleteConfirmModal isOpen={deleteConfig.isOpen} onClose={() => setDeleteConfig({ ...deleteConfig, isOpen: false })} onConfirm={handleConfirmDelete} itemName={deleteConfig.name} />
+      <AddBookModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        onRefresh={loadData} 
+        categories={categories} 
+      />
+      
+      <EditBookModal 
+        key={editBookData?.id || 'new-edit'} 
+        isOpen={isEditModalOpen} 
+        onClose={() => setIsEditModalOpen(false)} 
+        onRefresh={loadData} 
+        book={editBookData} 
+        categories={categories} 
+      />
+
+      <AddCategoryModal 
+        isOpen={isCategoryModalOpen} 
+        onClose={() => setIsCategoryModalOpen(false)} 
+        onRefresh={loadData} 
+      /> 
+
+      <DeleteConfirmModal 
+        isOpen={deleteConfig.isOpen} 
+        onClose={() => setDeleteConfig({ ...deleteConfig, isOpen: false })} 
+        onConfirm={handleConfirmDelete} 
+        itemName={deleteConfig.name} 
+      />
     </div>
   );
 };

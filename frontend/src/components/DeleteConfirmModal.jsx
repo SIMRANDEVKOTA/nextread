@@ -1,3 +1,6 @@
+// this component is used to confirm deletion of an item, 
+// such as a project or task. It displays a warning icon and asks the user
+//  to confirm their action before permanently deleting the item. 
 import React from 'react';
 import { FaExclamationTriangle, FaTimes } from 'react-icons/fa';
 
@@ -6,16 +9,23 @@ const DeleteConfirmModal = ({ isOpen, onClose, onConfirm, itemName }) => {
 
   return (
     <div className="modal-overlay">
-      <div className="modal-content delete-modal">
-        <button className="close-btn" onClick={onClose}><FaTimes /></button>
-        <div className="delete-icon-wrapper">
+      <div className="delete-modal-compact">
+        <button className="close-x-top" onClick={onClose}>
+          <FaTimes />
+        </button>
+        
+        <div className="danger-icon-brown">
           <FaExclamationTriangle />
         </div>
-        <h2>Confirm Deletion</h2>
-        <p>Are you sure you want to permanently delete <strong>{itemName}</strong>?</p>
-        <div className="modal-actions">
-          <button className="cancel-btn" onClick={onClose}>Cancel</button>
-          <button className="confirm-delete-btn" onClick={onConfirm}>Delete Now</button>
+        
+        <div className="delete-info">
+          <h3>Confirm Deletion</h3>
+          <p>Remove <strong>{itemName}</strong> permanently?</p>
+        </div>
+        
+        <div className="compact-actions">
+          <button className="btn-cancel" onClick={onClose}>Cancel</button>
+          <button className="btn-confirm-brown" onClick={onConfirm}>Delete Now</button>
         </div>
       </div>
     </div>
