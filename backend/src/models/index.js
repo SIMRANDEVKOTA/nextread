@@ -6,8 +6,8 @@ const User = require("./User")(sequelize, DataTypes);
 const Book = require("./Book")(sequelize, DataTypes);
 const Review = require("./Review")(sequelize, DataTypes);
 const UserBooks = require("./UserBooks")(sequelize, DataTypes);
-const Library = require("./Library")(sequelize, DataTypes); // ✅ FIXED
-const Category = require("./Category")(sequelize, DataTypes); // ✅ FIXED
+const Library = require("./Library")(sequelize, DataTypes);  
+const Category = require("./Category")(sequelize, DataTypes); 
 
 // 2. Define Relationships
 User.belongsToMany(Book, { through: UserBooks, foreignKey: "UserId" });
