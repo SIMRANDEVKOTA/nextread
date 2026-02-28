@@ -320,3 +320,98 @@
   border-radius: 8px;
   cursor: pointer;
 }
+
+/* --- LIBRARY RESPONSIVE STYLES --- */
+
+@media (max-width: 768px) {
+  .library-page {
+    padding: 20px 15px;
+  }
+
+  .library-header h1 {
+    font-size: 2rem;
+  }
+
+  .library-stats {
+    gap: 15px;
+  }
+
+  .stat {
+    padding: 15px 20px;
+    flex: 1 1 40%; /* Allows stats to sit 2-per-row on tablets */
+  }
+
+  .stat-number {
+    font-size: 2rem;
+  }
+
+  .library-section {
+    padding: 20px;
+    border-radius: 10px;
+  }
+
+  .library-item {
+    flex-direction: column; /* Stacks image above text for more room */
+    text-align: center;
+    align-items: center;
+    padding: 15px;
+  }
+
+  .book-thumb {
+    width: 100px;
+    height: 150px;
+  }
+
+  .item-info {
+    width: 100%;
+  }
+
+  .progress-edit {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .progress-edit input {
+    width: 100%;
+  }
+
+  .item-actions {
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    margin-top: 15px;
+  }
+
+  .btn-primary, .btn-finish, .btn-delete {
+    flex: 1; /* Buttons grow to fill space evenly */
+    justify-content: center;
+    font-size: 0.8rem;
+    padding: 12px 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .library-header h1 {
+    font-size: 1.7rem;
+  }
+
+  .stat {
+    flex: 1 1 100%; /* Stats stack vertically on phones */
+  }
+
+  .item-actions {
+    display: grid;
+    grid-template-columns: 1fr; /* Buttons become full-width stack */
+    width: 100%;
+  }
+
+  .custom-modal-content {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .btn-edit-progress {
+    width: 100%;
+    text-align: center;
+  }
+}

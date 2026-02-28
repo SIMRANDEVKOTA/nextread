@@ -189,3 +189,153 @@
   .hero-search { flex-direction: column; }
   .hero-stats { gap: 30px; padding-bottom: 40px; }
 }
+
+/* --- EXTENDED RESPONSIVE STYLES --- */
+
+@media (max-width: 768px) {
+  /* Reduce height for smaller screens so content isn't cut off */
+  .hero {
+    height: auto;
+    min-height: 100vh;
+    padding: 80px 0;
+  }
+
+  /* Center content on mobile/tablet for better balance */
+  .hero-overlay {
+    padding-left: 20px;
+    padding-right: 20px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .hero-content {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero-title {
+    font-size: 2.2rem;
+  }
+
+  .hero-search, .hero-actions {
+    justify-content: center;
+  }
+
+  /* Allow stats to stack if they get too crowded */
+  .hero-stats {
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+    gap: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Further tighten typography for small phone screens */
+  .hero-title {
+    font-size: 1.8rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+  }
+
+  /* Make buttons full-width on very small screens for easier tapping */
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 30px;
+  }
+
+  .btn-hero-primary, .btn-hero-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .hero-search {
+    width: 100%;
+  }
+}
+
+
+/* --- FINAL RESPONSIVE OVERRIDES --- */
+
+@media (max-width: 900px) {
+  /* Ensure the background image doesn't drown out the text */
+  .hero-overlay {
+    background: linear-gradient(to bottom, rgba(255, 252, 245, 0.7) 0%, rgba(255, 255, 255, 0.9) 100%);
+    padding-left: 5%;
+    padding-right: 5%;
+    align-items: center;
+    text-align: center;
+  }
+
+  .hero-content {
+    max-width: 100%;
+    text-align: center;
+    padding-top: 60px;
+  }
+
+  .hero-subtitle {
+    margin: 0 auto 30px auto;
+  }
+
+  .hero-search {
+    margin: 0 auto 30px auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    height: auto;
+    min-height: 100vh;
+    padding: 100px 0 60px; /* Space for fixed navbars if applicable */
+  }
+
+  .hero-title {
+    font-size: 2.4rem;
+  }
+
+  .hero-actions {
+    flex-direction: column; /* Stack buttons for better thumb-reach */
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto 40px auto;
+  }
+
+  .btn-hero-primary, .btn-hero-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .hero-stats {
+    flex-direction: row;
+    justify-content: center;
+    gap: 30px;
+    border-top: 1px solid rgba(107, 66, 38, 0.15);
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 1.8rem;
+  }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 2x2 grid for stats on tiny screens */
+    gap: 20px;
+  }
+
+  .stat-number {
+    font-size: 1.4rem;
+  }
+
+  .hero-search input {
+    font-size: 16px; /* Prevents iOS auto-zoom on focus */
+  }
+}

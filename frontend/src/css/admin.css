@@ -406,3 +406,92 @@
   color: #2d241e;
   margin-bottom: 8px;
 }
+
+/* --- ADMIN RESPONSIVE LAYER --- */
+
+/* For Tablets and smaller */
+@media (max-width: 1024px) {
+  .admin-main {
+    padding: 2rem; /* Reduce large desktop padding */
+  }
+  
+  .stats-grid.dashboard-enhanced {
+    grid-template-columns: repeat(2, 1fr); /* 2x2 grid on tablets */
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-layout {
+    flex-direction: column; /* Stack sidebar on top of content */
+  }
+
+  .admin-sidebar {
+    width: 100%;
+    min-width: 100%;
+    height: auto;
+    position: relative;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+
+  /* Optional: Hide nav links on mobile unless a "show" class is added via JS */
+  .admin-sidebar nav {
+    display: none; 
+    padding-bottom: 1rem;
+  }
+  
+  /* Show nav if you decide to add a toggle button later */
+  .admin-sidebar.mobile-open nav {
+    display: flex;
+  }
+
+  .admin-main {
+    padding: 1.5rem;
+  }
+
+  .admin-top-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  /* Handle Table Overflow */
+  .table-container {
+    padding: 1rem;
+    overflow-x: auto; /* Allows horizontal swipe on mobile tables */
+  }
+
+  .admin-table {
+    min-width: 600px; /* Forces table to keep its shape while scrolling */
+  }
+
+  /* Adjust Modals for Mobile */
+  .delete-modal-compact, .modal-content-compact {
+    width: 90%;
+    margin: 0 5%;
+    padding: 1.5rem;
+  }
+
+  .compact-grid {
+    grid-template-columns: 1fr; /* Stack form inputs vertically */
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-grid.dashboard-enhanced {
+    grid-template-columns: 1fr; /* Single column stats */
+  }
+
+  .stat-card {
+    padding: 1.5rem;
+  }
+
+  .stat-card h3 {
+    font-size: 1.8rem;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}

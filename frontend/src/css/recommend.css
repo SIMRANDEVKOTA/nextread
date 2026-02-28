@@ -139,3 +139,84 @@
 
 
 @keyframes modalPop { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+
+
+
+/* --- RECOMMENDATION RESPONSIVE STYLES --- */
+
+@media (max-width: 1100px) {
+  .book-grid {
+    grid-template-columns: repeat(3, 1fr); /* 3 columns for smaller desktops/tablets */
+    gap: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .recommend-header h1 {
+    font-size: 2.2rem;
+  }
+
+  .book-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns for tablets/large phones */
+  }
+
+  /* Make filter pills scrollable horizontally if they don't fit */
+  .filter-bar {
+    align-items: center;
+  }
+
+  .pill-container {
+    display: flex;
+    overflow-x: auto;
+    width: 100%;
+    padding-bottom: 10px;
+    justify-content: flex-start;
+  }
+
+  .pill {
+    white-space: nowrap; /* Prevents text from wrapping inside pills */
+    flex-shrink: 0;
+  }
+
+  .custom-modal-content {
+    width: 90%;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .recommend-container {
+    padding: 20px 15px;
+  }
+
+  .recommend-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .book-grid {
+    grid-template-columns: 1fr; /* Single column for mobile phones */
+  }
+
+  .book-card-v2 {
+    height: auto; /* Allow card to grow with content */
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  .card-top {
+    height: 300px; /* Larger image focus for single column */
+  }
+
+  .search-box input {
+    font-size: 16px; /* Prevents iOS auto-zoom */
+  }
+  
+  .modal-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .btn-modal-ok, .btn-modal-view {
+    width: 100%;
+  }
+}

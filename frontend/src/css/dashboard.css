@@ -80,3 +80,62 @@
   -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); 
 }
 .custom-modal-content { background: #fdfaf5; padding: 30px; border-radius: 15px; text-align: center; width: 380px; border: 2px solid #8b5e3c; }
+
+
+/* --- DASHBOARD RESPONSIVE LAYER --- */
+
+@media (max-width: 1024px) {
+  /* Switch to 3 columns for tablets */
+  .dashboard-grid, 
+  .popular-display-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Switch to 2 columns for smaller tablets/large phones */
+  .dashboard-grid, 
+  .popular-display-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+
+  .dashboard-container {
+    padding: 40px 15px;
+  }
+
+  .dashboard-header h1, 
+  .section-header-centered h2 {
+    font-size: 2rem;
+  }
+
+  .custom-modal-content {
+    width: 90%; /* Modal fits the screen width */
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Single column for mobile phones */
+  .dashboard-grid, 
+  .popular-display-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-header h1, 
+  .section-header-centered h2 {
+    font-size: 1.75rem;
+  }
+
+  /* Make card actions easier to tap */
+  .card-actions {
+    flex-wrap: wrap;
+  }
+
+  .btn-read-now, 
+  .btn-review-card {
+    padding: 12px 0; /* Larger touch target */
+    font-size: 0.9rem;
+  }
+}

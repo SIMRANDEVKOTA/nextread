@@ -125,3 +125,82 @@
   .contact-grid { grid-template-columns: 1fr; }
   .form-row { grid-template-columns: 1fr; }
 }
+
+/* --- EXPANDED RESPONSIVE STYLES --- */
+
+@media (max-width: 1024px) {
+  .contact-container {
+    padding: 0 40px; /* Prevent content from hitting screen edges */
+  }
+  
+  .contact-grid {
+    gap: 30px; /* Slightly tighter gap for tablets */
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-page {
+    padding: 50px 15px; /* Less vertical padding on mobile */
+  }
+
+  .contact-header {
+    margin-bottom: 40px;
+  }
+
+  .contact-header h1 {
+    font-size: 2rem; /* Scale down main title */
+  }
+
+  /* Your existing logic: Stack the grid and form rows */
+  .contact-grid { 
+    grid-template-columns: 1fr; 
+  }
+
+  .form-row { 
+    grid-template-columns: 1fr; 
+    gap: 0; /* Let form-group margin handle the spacing */
+  }
+
+  .contact-form {
+    padding: 25px; /* Much smaller padding inside the form card */
+    border-radius: 15px;
+  }
+
+  .info-card {
+    padding: 20px;
+    align-items: center; /* Center icons relative to text on mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  .icon-circle {
+    width: 40px;
+    height: 40px;
+    min-width: 40px; /* Prevent circle from squishing */
+    font-size: 1rem;
+  }
+
+  .info-card {
+    gap: 15px;
+  }
+
+  .info-card h4 {
+    font-size: 1rem;
+    margin-bottom: 2px;
+  }
+
+  .info-card p {
+    font-size: 0.85rem;
+  }
+
+  .form-group input, 
+  .form-group textarea {
+    padding: 12px;
+    font-size: 16px; /* Prevents mobile browser auto-zoom on focus */
+  }
+
+  .contact-submit-btn {
+    padding: 14px;
+    border-radius: 12px; /* Less round, more standard mobile look */
+  }
+}

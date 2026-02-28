@@ -67,3 +67,66 @@
 .read-btn:hover {
   background: #1e40af;
 }
+
+/* --- RESPONSIVE GRID & CARD ADJUSTMENTS --- */
+
+/* 1. The Container (Add this to your parent element, e.g., <div class="books-grid">) */
+.books-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  padding: 20px;
+}
+
+/* 2. Media Queries for the Card */
+@media (max-width: 600px) {
+  .books-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+    padding: 10px;
+  }
+
+  .book-card {
+    padding: 10px;
+    border-radius: 10px;
+  }
+
+  .book-card img {
+    height: 180px; /* Shorter images for smaller screens */
+  }
+
+  .book-card h4 {
+    font-size: 14px; /* Slightly smaller title */
+  }
+
+  .book-card p {
+    font-size: 12px;
+  }
+
+  /* Make buttons easier to tap on mobile */
+  .book-actions {
+    flex-direction: column; 
+    gap: 8px;
+  }
+
+  .read-btn {
+    width: 100%;
+    padding: 8px;
+    font-size: 13px;
+  }
+  
+  .save-btn {
+    font-size: 20px; /* Slightly larger icon for easier thumb-tapping */
+  }
+}
+
+/* 3. Extra Small Screens (Phones in portrait) */
+@media (max-width: 380px) {
+  .books-grid {
+    grid-template-columns: 1fr; /* One large card per row */
+  }
+  
+  .book-card img {
+    height: 250px; /* Let the image be prominent if it's the only one in the row */
+  }
+}

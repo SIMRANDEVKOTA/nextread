@@ -174,3 +174,56 @@ button[type="submit"]:hover {
   font-weight: 600;
   text-decoration: none;
 }
+
+/* --- RESPONSIVE STYLES --- */
+
+@media (max-width: 480px) {
+  .auth-wrapper {
+    padding: 15px; /* Less padding around the edge of the screen */
+    align-items: flex-start; /* Push card to top if screen is very short */
+    padding-top: 50px;
+  }
+
+  .auth-container {
+    padding: 24px 20px; /* Slimmer internal padding */
+    border-radius: 16px; /* Slightly rounder for modern mobile feel */
+  }
+
+  .auth-form h2 {
+    font-size: 1.4rem; /* Scale down heading slightly */
+  }
+
+  .logo-text {
+    font-size: 1.2rem;
+  }
+
+  /* Increase touch area for interactive elements */
+  .input-wrapper input {
+    padding-top: 14px;
+    padding-bottom: 14px;
+    font-size: 16px; /* Prevents iOS from auto-zooming on focus */
+  }
+
+  button[type="submit"] {
+    padding: 14px;
+    font-size: 1rem;
+  }
+
+  .close-btn {
+    top: 10px;
+    right: 10px;
+    padding: 8px; /* Larger tap target */
+  }
+}
+
+/* Landscape Mode Fix for shorter screens */
+@media (max-height: 500px) and (orientation: landscape) {
+  .auth-wrapper {
+    align-items: flex-start;
+    padding-top: 20px;
+  }
+  
+  .auth-container {
+    margin-bottom: 20px;
+  }
+}
