@@ -32,7 +32,6 @@ const Login = () => {
       console.log("🟢 Backend Response:", res); 
 
       if (res.token && res.user) {
-        // ✅ LOGGING ROLE FOR DEBUGGING
         console.log("✅ User Role from DB:", res.user.role); 
         
         localStorage.setItem("token", res.token);
@@ -40,7 +39,6 @@ const Login = () => {
 
         login(res.user, res.token);
 
-        // ✅ REDIRECTION LOGIC
         if (res.user.role === "admin") {
           navigate("/admin");
         } else {
@@ -57,11 +55,13 @@ const Login = () => {
   };
 
   const errorStyle = { color: "#d32f2f", fontSize: "0.8rem", marginTop: "5px", display: "block" };
+  // Fixed the padding-left to prevent text overlapping icons
+  const inputPaddingStyle = { paddingLeft: "45px" };
 
   return (
     <div className="auth-wrapper">
       <div className="auth-container">
-        <Link to="/" className="close-btn"><FaTimes /></Link>
+        <Link to="/" className="close-btn" style={{ textDecoration: 'none' }}><FaTimes /></Link>
 
         <div className="logo-section">
           <div className="logo-icon"><FaBookOpen /></div>
@@ -78,7 +78,7 @@ const Login = () => {
             <label>Email Address</label>
             <div className="input-wrapper">
               <FaEnvelope className="input-icon" />
-              <input type="email" {...register("email")} />
+              <input type="email" {...register("email")} style={inputPaddingStyle} />
             </div>
             {errors.email && <span style={errorStyle}>{errors.email.message}</span>}
           </div>
@@ -87,8 +87,13 @@ const Login = () => {
             <label>Password</label>
             <div className="input-wrapper">
               <FaLock className="input-icon" />
-              <input type={showPassword ? "text" : "password"} {...register("password")} />
+              <input 
+                type={showPassword ? "text" : "password"} 
+                {...register("password")} 
+                style={inputPaddingStyle}
+              />
               <button type="button" className="toggle-password" onClick={() => setShowPassword(!showPassword)}>
+                {/* Fixed: Show EyeSlash when text is visible, Eye when hidden */}
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
             </div>

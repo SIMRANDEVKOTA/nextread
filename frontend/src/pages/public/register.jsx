@@ -9,7 +9,6 @@ import { FaEye, FaEyeSlash, FaUser, FaEnvelope, FaLock, FaBookOpen, FaTimes } fr
 
 const Register = () => {
   const navigate = useNavigate();
-  // Note: We DO NOT need 'login' from context here anymore
   const [serverError, setServerError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -26,16 +25,9 @@ const Register = () => {
   const onSubmit = async (data) => {
     setServerError(""); 
     try {
-      // 1. Send data to backend
       await authService.register(data);
-
-      // 2. SUCCESS! 
-      // ❌ OLD WAY: login(res.user, res.token); navigate("/dashboard");
-      
-      // ✅ NEW WAY: Show alert and go to Login
       alert("Registration successful! Please log in with your new account.");
       navigate("/login"); 
-
     } catch (err) {
       console.error("Register Error:", err);
       setServerError(err.response?.data?.message || "Registration failed");
@@ -43,11 +35,13 @@ const Register = () => {
   };
 
   const errorStyle = { color: "#d32f2f", fontSize: "0.8rem", marginTop: "5px", display: "block" };
+  // Fixed the padding-left to prevent text overlapping icons
+  const inputPaddingStyle = { paddingLeft: "45px" };
 
   return (
     <div className="auth-wrapper">
       <div className="auth-container">
-        <Link to="/" className="close-btn"><FaTimes /></Link>
+        <Link to="/" className="close-btn" style={{ textDecoration: 'none' }}><FaTimes /></Link>
 
         <div className="logo-section">
           <div className="logo-icon"><FaBookOpen /></div>
@@ -64,7 +58,7 @@ const Register = () => {
             <label>Full Name</label>
             <div className="input-wrapper">
               <FaUser className="input-icon" />
-              <input {...register("fullName")} placeholder="John Doe" />
+              <input {...register("fullName")} placeholder="John Doe" style={inputPaddingStyle} />
             </div>
             {errors.fullName && <span style={errorStyle}>{errors.fullName.message}</span>}
           </div>
@@ -73,7 +67,7 @@ const Register = () => {
             <label>Email</label>
             <div className="input-wrapper">
               <FaEnvelope className="input-icon" />
-              <input {...register("email")} placeholder="you@example.com" />
+              <input {...register("email")} placeholder="you@example.com" style={inputPaddingStyle} />
             </div>
             {errors.email && <span style={errorStyle}>{errors.email.message}</span>}
           </div>
@@ -82,8 +76,13 @@ const Register = () => {
             <label>Password</label>
             <div className="input-wrapper">
               <FaLock className="input-icon" />
-              <input type={showPassword ? "text" : "password"} {...register("password")} />
+              <input 
+                type={showPassword ? "text" : "password"} 
+                {...register("password")} 
+                style={inputPaddingStyle}
+              />
               <button type="button" className="toggle-password" onClick={() => setShowPassword(!showPassword)}>
+                {/* Fixed: Show EyeSlash when text is visible, Eye when hidden */}
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
             </div>
@@ -94,8 +93,13 @@ const Register = () => {
             <label>Confirm Password</label>
             <div className="input-wrapper">
               <FaLock className="input-icon" />
-              <input type={showConfirmPassword ? "text" : "password"} {...register("confirmPassword")} />
+              <input 
+                type={showConfirmPassword ? "text" : "password"} 
+                {...register("confirmPassword")} 
+                style={inputPaddingStyle}
+              />
               <button type="button" className="toggle-password" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+                {/* Fixed: Show EyeSlash when text is visible, Eye when hidden */}
                 {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
             </div>

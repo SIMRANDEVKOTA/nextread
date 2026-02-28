@@ -24,14 +24,17 @@ const AddCategoryModal = ({ isOpen, onClose, onRefresh }) => {
 
     return (
         <div className="modal-overlay">
-            <div className="modal-content admin-theme" style={{ maxWidth: '400px' }}>
-                <div className="modal-header">
+            <div className="category-modal-content">
+                {/* Close Button matching your Edit/Delete style */}
+                <button onClick={onClose} className="close-x-top">
+                    <FaTimes />
+                </button>
+
+                <form className="category-form" onSubmit={handleSubmit}>
                     <h2>Add New Genre</h2>
-                    <button onClick={onClose} className="close-btn"><FaTimes /></button>
-                </div>
-                <form className="admin-form" onSubmit={handleSubmit}>
-                    <div className="input-wrapper">
-                        <label className="field-label">Genre Name</label>
+                    
+                    <div className="category-input-group">
+                        <label>Genre Name</label>
                         <input 
                             type="text" 
                             placeholder="e.g. Mystery, Sci-Fi" 
@@ -40,7 +43,10 @@ const AddCategoryModal = ({ isOpen, onClose, onRefresh }) => {
                             required 
                         />
                     </div>
-                    <button type="submit" className="submit-admin-btn">Add Category</button>
+
+                    <button type="submit" className="btn-category-submit">
+                        Add Category
+                    </button>
                 </form>
             </div>
         </div>

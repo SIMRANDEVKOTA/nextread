@@ -197,7 +197,7 @@
   font-weight: 700;
 }
 
-/* --- COMPACT MODAL SYSTEM (Externalized) --- */
+/* --- COMPACT MODAL SYSTEM --- */
 .modal-overlay {
   position: fixed; 
   top: 0; left: 0; 
@@ -211,7 +211,84 @@
   backdrop-filter: blur(4px);
 }
 
-/* The Professional Small Pop-up */
+/* Fixed Category Modal - Consistent with Edit/Delete Professionalism */
+.category-modal-content {
+  background: white; 
+  width: 400px; 
+  padding: 2.5rem; 
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+  position: relative;
+  border-top: 5px solid #8b5e3c;
+  animation: modalPop 0.3s ease-out;
+}
+
+.category-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.category-form h2 {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #2d241e;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.category-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+
+.category-input-group label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #8b5e3c;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.category-input-group input {
+  padding: 12px 15px;
+  border: 1px solid #e8e2da;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  background: #fdfaf5;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.category-input-group input:focus {
+  border-color: #8b5e3c;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(139, 94, 60, 0.1);
+}
+
+.btn-category-submit {
+  background: #2d241e;
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 5px;
+}
+
+.btn-category-submit:hover {
+  background: #000;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* The Professional Small Pop-up (Delete) */
 .delete-modal-compact {
   background: white;
   width: 320px;
@@ -226,7 +303,7 @@
 /* Header fix for Add and Edit Modals */
 .modal-header-small {
   display: flex;
-  justify-content: space-between; /* Pushes H2 to left, Close button to right */
+  justify-content: space-between;
   align-items: center;
   margin-bottom: 1.2rem;
   border-bottom: 1px solid #f0ede9;
@@ -407,24 +484,27 @@
   margin-bottom: 8px;
 }
 
+/* Modal Animation */
+@keyframes modalPop {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
 /* --- ADMIN RESPONSIVE LAYER --- */
 
-/* For Tablets and smaller */
 @media (max-width: 1024px) {
   .admin-main {
-    padding: 2rem; /* Reduce large desktop padding */
+    padding: 2rem;
   }
-  
   .stats-grid.dashboard-enhanced {
-    grid-template-columns: repeat(2, 1fr); /* 2x2 grid on tablets */
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 768px) {
   .admin-layout {
-    flex-direction: column; /* Stack sidebar on top of content */
+    flex-direction: column;
   }
-
   .admin-sidebar {
     width: 100%;
     min-width: 100%;
@@ -432,63 +512,45 @@
     position: relative;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   }
-
-  /* Optional: Hide nav links on mobile unless a "show" class is added via JS */
   .admin-sidebar nav {
     display: none; 
     padding-bottom: 1rem;
   }
-  
-  /* Show nav if you decide to add a toggle button later */
-  .admin-sidebar.mobile-open nav {
-    display: flex;
-  }
-
   .admin-main {
     padding: 1.5rem;
   }
-
   .admin-top-bar {
     flex-direction: column;
     align-items: flex-start;
     gap: 15px;
   }
-
-  /* Handle Table Overflow */
   .table-container {
     padding: 1rem;
-    overflow-x: auto; /* Allows horizontal swipe on mobile tables */
+    overflow-x: auto;
   }
-
   .admin-table {
-    min-width: 600px; /* Forces table to keep its shape while scrolling */
+    min-width: 600px;
   }
-
-  /* Adjust Modals for Mobile */
-  .delete-modal-compact, .modal-content-compact {
+  .delete-modal-compact, .modal-content-compact, .category-modal-content {
     width: 90%;
     margin: 0 5%;
     padding: 1.5rem;
   }
-
   .compact-grid {
-    grid-template-columns: 1fr; /* Stack form inputs vertically */
+    grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 480px) {
   .stats-grid.dashboard-enhanced {
-    grid-template-columns: 1fr; /* Single column stats */
+    grid-template-columns: 1fr;
   }
-
   .stat-card {
     padding: 1.5rem;
   }
-
   .stat-card h3 {
     font-size: 1.8rem;
   }
-
   .section-header {
     flex-direction: column;
     align-items: flex-start;

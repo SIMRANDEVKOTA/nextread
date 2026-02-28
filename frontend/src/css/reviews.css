@@ -97,3 +97,77 @@
 .rev-user-info strong { color: #2d241e; font-size: 0.95rem; }
 .rev-text { color: #555; font-size: 0.9rem; line-height: 1.5; margin: 5px 0; }
 .rev-date { font-size: 0.75rem; color: #aaa; }
+
+
+
+/* --- REVIEWS PAGE RESPONSIVE STYLES --- */
+
+@media (max-width: 992px) {
+  .reviews-main-grid {
+    grid-template-columns: 1fr; /* Stack the book info and reviews */
+    gap: 30px;
+  }
+
+  .sticky-book-content {
+    position: relative; /* Disable sticky on mobile/tablet */
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  }
+
+  .book-poster img {
+    max-width: 200px; /* Prevent book cover from being massive on mobile */
+  }
+}
+
+@media (max-width: 768px) {
+  .reviews-page {
+    padding: 20px 15px;
+  }
+
+  .review-back-btn {
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .feedback-form-card {
+    padding: 20px;
+  }
+
+  .feedback-form-card textarea {
+    font-size: 16px; /* Prevents iOS auto-zoom on focus */
+  }
+
+  .submit-review-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 14px;
+    border-radius: 10px;
+  }
+
+  .user-review-card {
+    flex-direction: column; /* Stack avatar and text for more space */
+    align-items: flex-start;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .book-meta h1 {
+    font-size: 1.5rem;
+  }
+
+  .rev-user-info strong {
+    font-size: 0.9rem;
+  }
+
+  .rev-text {
+    font-size: 0.85rem;
+  }
+}
